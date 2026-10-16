@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sécurité RFID — Plan de cours</title>
+<style>
+  :root{
+    --bg:#f4f2ec; --surface:#ffffff; --surface-2:#eceae2;
+    --text:#1b1f1d; --text-dim:#5b6460; --accent:#0f6b5c; --accent-2:#b5742a;
+    --border:#dcd8cb; --code:#2f3b36; --mono:'JetBrains Mono', ui-monospace, Menlo, monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14181a; --surface:#1c2224; --surface-2:#232b2d;
+      --text:#e9ece9; --text-dim:#99a39c; --accent:#5fd3b5; --accent-2:#e3a65c;
+      --border:#2e3638; --code:#aeeedd; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#14181a; --surface:#1c2224; --surface-2:#232b2d;
+    --text:#e9ece9; --text-dim:#99a39c; --accent:#5fd3b5; --accent-2:#e3a65c;
+    --border:#2e3638; --code:#aeeedd; color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-padding-top:4.5rem; scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  header{
+    position:sticky; top:0; z-index:10; background:var(--surface);
+    border-bottom:1px solid var(--border); padding:.9rem 1.2rem;
+    padding-top:calc(.9rem + env(safe-area-inset-top,0px));
+    display:flex; align-items:center; justify-content:space-between; gap:1rem; flex-wrap:wrap;
+  }
+  header h1{font-size:1.05rem; margin:0; letter-spacing:.02em;}
+  header h1 span{color:var(--accent); font-family:var(--mono); font-size:.85rem; display:block; font-weight:600;}
+  nav.toc{display:flex; gap:.4rem; flex-wrap:wrap; max-width:60%;}
+  nav.toc a{font-size:.72rem; color:var(--text-dim); text-decoration:none; padding:.25rem .5rem; border:1px solid var(--border); border-radius:999px;}
+  nav.toc a:hover{color:var(--accent); border-color:var(--accent);}
+  main{max-width:860px; margin:0 auto; padding:2rem 1.2rem 5rem;}
+  section{margin-bottom:3rem; scroll-margin-top:4.5rem;}
+  h2{font-size:1.5rem; margin:0 0 .3rem; display:flex; align-items:center; gap:.5rem;}
+  h2 .num{font-family:var(--mono); color:var(--accent); font-size:1rem; background:var(--surface-2); padding:.15rem .5rem; border-radius:6px;}
+  .lead{color:var(--text-dim); margin-top:0;}
+  .card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:1.3rem 1.5rem; margin-top:1rem;}
+  .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.8rem;}
+  table{width:100%; border-collapse:collapse; font-size:.92rem;}
+  th,td{text-align:left; padding:.5rem .6rem; border-bottom:1px solid var(--border);}
+  th{color:var(--text-dim); font-weight:600; font-size:.78rem; text-transform:uppercase; letter-spacing:.04em;}
+  .tag{display:inline-block; font-family:var(--mono); font-size:.72rem; background:var(--surface-2); color:var(--accent-2); padding:.15rem .5rem; border-radius:6px; margin-bottom:.5rem;}
+  .livrable{margin-top:.8rem; padding:.7rem .9rem; background:var(--surface-2); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; font-size:.92rem;}
+  .livrable b{color:var(--accent);}
+  .overflow{overflow-x:auto;}
+  .materiel li{margin-bottom:.4rem;}
+  footer{text-align:center; color:var(--text-dim); font-size:.8rem; padding:2rem 1rem 3rem;}
+  #top-link{position:fixed; bottom:1.2rem; right:1.2rem; background:var(--accent); color:#0b1210; width:2.6rem; height:2.6rem; border-radius:50%; display:flex; align-items:center; justify-content:center; text-decoration:none; font-weight:700; box-shadow:0 4px 14px rgba(0,0,0,.25);}
+</style>
+</head>
+<body>
+<header>
+  <h1>Sécurité RFID<span>18h · 12 séances de 1h30</span></h1>
+  <nav class="toc">
+    <a href="#overview">Vue d'ensemble</a>
+    <a href="#seances">Séances</a>
+    <a href="#evaluation">Évaluation</a>
+  </nav>
+</header>
+
+<main>
+
+<section id="overview">
+  <h2>Objectifs pédagogiques</h2>
+  <p class="lead">À l'issue du module, vous saurez expliquer les technologies RFID, identifier leurs failles, utiliser un SDR pour observer un signal, piloter un RC522 avec Arduino, réaliser un clonage encadré et proposer des contre-mesures.</p>
+
+  <div class="card">
+    <span class="tag">matériel fourni</span>
+    <div class="grid materiel">
+      <ul style="margin:0;padding-left:1.1rem;">
+        <li><b>NESDR Smart V5</b> (R820T2+TCXO) — 100 kHz–1,75 GHz</li>
+        <li><b>Ham It Up Nano</b> — up-converter 100 kHz–65 MHz</li>
+        <li>Kit antenne VHF-UHF Nooelec</li>
+        <li>Antenne active <b>MLA-30 Plus</b> (500 kHz–30 MHz)</li>
+      </ul>
+      <ul style="margin:0;padding-left:1.1rem;">
+        <li>Module <b>RC522</b> (13,56 MHz / ISO14443A)</li>
+        <li>1 badge + 1 carte RFID 13,56 MHz</li>
+        <li>Arduino Uno R3 + câble USB</li>
+        <li>Adaptateurs SMA / alim micro-USB</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card overflow">
+    <span class="tag">progression</span>
+    <table>
+      <tr><th>#</th><th>Séance</th><th>Thème</th></tr>
+      <tr><td>1</td><td>1h30</td><td>RFID : principes, fréquences, normes</td></tr>
+      <tr><td>2</td><td>1h30</td><td>Menaces et surface d'attaque RFID</td></tr>
+      <tr><td>3</td><td>1h30</td><td>Prise en main du SDR</td></tr>
+      <tr><td>4</td><td>1h30</td><td>Réception de signaux connus</td></tr>
+      <tr><td>5</td><td>1h30</td><td>Capture d'un badge LF 125 kHz</td></tr>
+      <tr><td>6</td><td>1h30</td><td>Capture d'un badge HF 13,56 MHz</td></tr>
+      <tr><td>7</td><td>1h30</td><td>Arduino + RC522 : câblage, lecture d'UID</td></tr>
+      <tr><td>8</td><td>1h30</td><td>Lecture/écriture de secteurs Mifare Classic</td></tr>
+      <tr><td>9</td><td>1h30</td><td>Atelier clonage et rejeu</td></tr>
+      <tr><td>10</td><td>1h30</td><td>Attaques avancées (étude de cas)</td></tr>
+      <tr><td>11</td><td>1h30</td><td>Contre-mesures et conception sécurisée</td></tr>
+      <tr><td>12</td><td>1h30</td><td>Soutenances + synthèse</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="seances">
+<h2 style="border:none;"><span class="num">§</span> Détail des séances</h2>
+
+<section id="s1">
+  <h2><span class="num">01</span> RFID : principes, fréquences, normes</h2>
+  <p>Cours + manipulation découverte. Bandes LF/HF/UHF, couplage inductif vs champ lointain, normes ISO 14443 / 15693 / 18000-6. Manipulation du badge et de la carte fournis, hypothèses sur leur fréquence.</p>
+  <div class="livrable"><b>Livrable :</b> fiche de synthèse des 3 familles RFID (fréquence, portée, usages, exemples).</div>
+</section>
+
+<section id="s2">
+  <h2><span class="num">02</span> Menaces et surface d'attaque RFID</h2>
+  <p>Panorama : eavesdropping, skimming, clonage, rejeu, attaque relais, brouillage, attaque sur Crypto1 (Mifare Classic). Études de cas réels (transport, contrôle d'accès, passeports).</p>
+  <div class="livrable"><b>Livrable :</b> tableau menace / prérequis attaquant / impact / contre-mesure (amorcé, complété en fin de module).</div>
+</section>
+
+<section id="s3">
+  <h2><span class="num">03</span> Prise en main du SDR</h2>
+  <p>Installation SDR#/GQRX/SDR++. Le couple NESDR + Ham It Up Nano : pourquoi l'up-converter est nécessaire sous ~24 MHz, rôle du TCXO. Câblage SMA, alimentation de l'up-converter, choix d'antenne selon la bande visée.</p>
+  <div class="livrable"><b>Livrable :</b> schéma de câblage annoté du poste SDR complet.</div>
+</section>
+
+<section id="s4">
+  <h2><span class="num">04</span> Réception de signaux connus</h2>
+  <p>Calibration du récepteur (écart TCXO), réception de stations connues (AM/FM, DCF77, CB) pour valider la chaîne avant le RFID. Prise en main du waterfall et des réglages de gain.</p>
+  <div class="livrable"><b>Livrable :</b> captures d'écran commentées de 2 signaux identifiés.</div>
+</section>
+
+<section id="s5">
+  <h2><span class="num">05</span> Capture d'un badge LF 125 kHz</h2>
+  <p>MLA-30 Plus en entrée du Ham It Up Nano. Approche du badge (ou étude de captures de référence). Observation de la modulation ASK/FSK typique des badges LF (EM4100, HID Prox).</p>
+  <div class="livrable"><b>Livrable :</b> capture + interprétation du type de modulation observée.</div>
+</section>
+
+<section id="s6">
+  <h2><span class="num">06</span> Capture d'un badge HF 13,56 MHz</h2>
+  <p>Approche de la carte/badge à proximité de l'antenne pendant une interrogation (via le RC522). Observation de la porteuse 13,56 MHz et des bandes latérales lors de l'échange.</p>
+  <div class="livrable"><b>Livrable :</b> capture annotée montrant porteuse et modulation de charge.</div>
+</section>
+
+<section id="s7">
+  <h2><span class="num">07</span> Arduino + RC522 : câblage et lecture d'UID</h2>
+  <p>Câblage SPI du RC522 sur l'Arduino Uno, installation de la bibliothèque MFRC522, premier sketch de lecture d'UID du badge et de la carte fournis.</p>
+  <div class="livrable"><b>Livrable :</b> code source commenté + UID des deux supports relevés.</div>
+</section>
+
+<section id="s8">
+  <h2><span class="num">08</span> Lecture/écriture de secteurs Mifare Classic</h2>
+  <p>Structure d'une carte Mifare Classic : secteurs, blocs, clés A/B, bits d'accès. Lecture puis écriture d'un bloc de données, lecture du bloc fabricant.</p>
+  <div class="livrable"><b>Livrable :</b> mini rapport de TP avec capture des données lues/écrites.</div>
+</section>
+
+<section id="s9">
+  <h2><span class="num">09</span> Atelier clonage et rejeu</h2>
+  <p>Démonstration de clonage d'UID sur carte magique (ou simulation logicielle). Discussion du cadre légal (accès frauduleux à un STAD, usage strictement pédagogique et consenti).</p>
+  <div class="livrable"><b>Livrable :</b> compte-rendu d'attaque incluant les limites légales rencontrées.</div>
+</section>
+
+<section id="s10">
+  <h2><span class="num">10</span> Attaques avancées (étude de cas)</h2>
+  <p>Attaques Crypto1 (darkside, nested authentication), attaques relais sur badges sans contact, outils dédiés (Proxmark3, Flipper Zero) en complément du kit — traité en étude de cas / démonstrations commentées.</p>
+  <div class="livrable"><b>Livrable :</b> QCM de compréhension.</div>
+</section>
+
+<section id="s11">
+  <h2><span class="num">11</span> Contre-mesures et conception sécurisée</h2>
+  <p>Mifare DESFire et cryptographie forte, authentification mutuelle, UID aléatoire, limitation de portée (blindage, Faraday), bonnes pratiques (anti-rejeu, horodatage, journalisation), sensibilisation utilisateur.</p>
+  <div class="livrable"><b>Livrable :</b> cahier des charges de sécurisation d'un contrôle d'accès RFID fictif.</div>
+</section>
+
+<section id="s12">
+  <h2><span class="num">12</span> Soutenances et synthèse</h2>
+  <p>Présentation des projets, debrief collectif, quiz final de synthèse.</p>
+</section>
+</section>
+
+<section id="evaluation">
+  <h2>Modalités d'évaluation</h2>
+
+  <div class="card">
+    <span class="tag">20% · évaluation continue</span>
+    <p style="margin:.3rem 0 0;">Basée sur les livrables des séances 1, 3, 5, 6, 7, 8, 9 (comptes-rendus courts, captures commentées, code source).</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">30% · quiz</span>
+    <p style="margin:.3rem 0 0;"><b>Quiz intermédiaire</b> (fin séance 2) : fréquences, normes, typologie des menaces.<br>
+    <b>Quiz final</b> (séance 12) : SDR, Mifare Classic, attaques avancées, contre-mesures.<br>
+    Format : 15–20 questions, QCM + 2–3 questions ouvertes courtes.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">50% · projet final (binôme, séances 9→12)</span>
+    <p><b>Option A — Audit de sécurité</b><br>Auditer le badge/carte fourni (SDR + RC522), tenter un clonage, documenter les failles et proposer des contre-mesures budgétées. Rapport + captures + soutenance 10 min.</p>
+    <p><b>Option B — Système d'accès sécurisé</b><br>Prototype Arduino + RC522 intégrant une contre-mesure (liste blanche d'UID, double authentification, journalisation, détection de clonage). Code + démo + note de conception.</p>
+    <div class="overflow">
+      <table>
+        <tr><th>Critère</th><th>Pondération</th></tr>
+        <tr><td>Maîtrise technique (SDR et/ou Arduino/RC522)</td><td>30%</td></tr>
+        <tr><td>Pertinence de l'analyse de sécurité</td><td>25%</td></tr>
+        <tr><td>Qualité des contre-mesures proposées</td><td>20%</td></tr>
+        <tr><td>Rapport / documentation</td><td>15%</td></tr>
+        <tr><td>Soutenance orale</td><td>10%</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<a id="top-link" href="#overview" aria-label="Haut de page">↑</a>
+<footer>Module Sécurité RFID — 18h / 12 séances</footer>
+</body>
+</html>
