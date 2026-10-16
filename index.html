@@ -45,6 +45,8 @@
   section{margin-bottom:3rem; scroll-margin-top:4.5rem;}
   h2{font-size:1.5rem; margin:0 0 .3rem; display:flex; align-items:center; gap:.5rem;}
   h2 .num{font-family:var(--mono); color:var(--accent); font-size:1rem; background:var(--surface-2); padding:.15rem .5rem; border-radius:6px;}
+  h2 a{color:inherit; text-decoration:none; border-bottom:2px solid var(--accent);}
+  h2 a:hover{color:var(--accent);}
   .lead{color:var(--text-dim); margin-top:0;}
   .card{background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:1.3rem 1.5rem; margin-top:1rem;}
   .grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.8rem;}
@@ -118,73 +120,73 @@
 <h2 style="border:none;"><span class="num">§</span> Détail des séances</h2>
 
 <section id="s1">
-  <h2><span class="num">01</span> RFID : principes, fréquences, normes</h2>
+  <h2><span class="num">01</span> <a href="https://claude.ai/artifact/KzhRaVG9Q8DJWxzKj751FA" target="_blank" rel="noopener">RFID : principes, fréquences, normes</a></h2>
   <p>Cours + manipulation découverte. Bandes LF/HF/UHF, couplage inductif vs champ lointain, normes ISO 14443 / 15693 / 18000-6. Manipulation du badge et de la carte fournis, hypothèses sur leur fréquence.</p>
   <div class="livrable"><b>Livrable :</b> fiche de synthèse des 3 familles RFID (fréquence, portée, usages, exemples).</div>
 </section>
 
 <section id="s2">
-  <h2><span class="num">02</span> Menaces et surface d'attaque RFID</h2>
+  <h2><span class="num">02</span> <a href="https://claude.ai/artifact/SRWV5W6z8TL76rLFK6nzja" target="_blank" rel="noopener">Menaces et surface d'attaque RFID</a></h2>
   <p>Panorama : eavesdropping, skimming, clonage, rejeu, attaque relais, brouillage, attaque sur Crypto1 (Mifare Classic). Études de cas réels (transport, contrôle d'accès, passeports).</p>
   <div class="livrable"><b>Livrable :</b> tableau menace / prérequis attaquant / impact / contre-mesure (amorcé, complété en fin de module).</div>
 </section>
 
 <section id="s3">
-  <h2><span class="num">03</span> Prise en main du SDR</h2>
+  <h2><span class="num">03</span> <a href="https://claude.ai/artifact/3M3kSTywdL5sUHYLnjZeap" target="_blank" rel="noopener">Prise en main du SDR</a></h2>
   <p>Installation SDR#/GQRX/SDR++. Le couple NESDR + Ham It Up Nano : pourquoi l'up-converter est nécessaire sous ~24 MHz, rôle du TCXO. Câblage SMA, alimentation de l'up-converter, choix d'antenne selon la bande visée.</p>
   <div class="livrable"><b>Livrable :</b> schéma de câblage annoté du poste SDR complet.</div>
 </section>
 
 <section id="s4">
-  <h2><span class="num">04</span> Réception de signaux connus</h2>
+  <h2><span class="num">04</span> <a href="https://claude.ai/artifact/GbomiJymcR2WtCFFJBvZ6r" target="_blank" rel="noopener">Réception de signaux connus</a></h2>
   <p>Calibration du récepteur (écart TCXO), réception de stations connues (AM/FM, DCF77, CB) pour valider la chaîne avant le RFID. Prise en main du waterfall et des réglages de gain.</p>
   <div class="livrable"><b>Livrable :</b> captures d'écran commentées de 2 signaux identifiés.</div>
 </section>
 
 <section id="s5">
-  <h2><span class="num">05</span> Capture d'un badge LF 125 kHz</h2>
+  <h2><span class="num">05</span> <a href="https://claude.ai/artifact/RfyQHSCYdEh3krALSj5abt" target="_blank" rel="noopener">Capture d'un badge LF 125 kHz</a></h2>
   <p>MLA-30 Plus en entrée du Ham It Up Nano. Approche du badge (ou étude de captures de référence). Observation de la modulation ASK/FSK typique des badges LF (EM4100, HID Prox).</p>
   <div class="livrable"><b>Livrable :</b> capture + interprétation du type de modulation observée.</div>
 </section>
 
 <section id="s6">
-  <h2><span class="num">06</span> Capture d'un badge HF 13,56 MHz</h2>
+  <h2><span class="num">06</span> <a href="https://claude.ai/artifact/T3WRV9Be6hJBVZL6FS5KVB" target="_blank" rel="noopener">Capture d'un badge HF 13,56 MHz</a></h2>
   <p>Approche de la carte/badge à proximité de l'antenne pendant une interrogation (via le RC522). Observation de la porteuse 13,56 MHz et des bandes latérales lors de l'échange.</p>
   <div class="livrable"><b>Livrable :</b> capture annotée montrant porteuse et modulation de charge.</div>
 </section>
 
 <section id="s7">
-  <h2><span class="num">07</span> Arduino + RC522 : câblage et lecture d'UID</h2>
+  <h2><span class="num">07</span> <a href="https://claude.ai/artifact/56W5ZjMzYGTe3CgDambgRj" target="_blank" rel="noopener">Arduino + RC522 : câblage et lecture d'UID</a></h2>
   <p>Câblage SPI du RC522 sur l'Arduino Uno, installation de la bibliothèque MFRC522, premier sketch de lecture d'UID du badge et de la carte fournis.</p>
   <div class="livrable"><b>Livrable :</b> code source commenté + UID des deux supports relevés.</div>
 </section>
 
 <section id="s8">
-  <h2><span class="num">08</span> Lecture/écriture de secteurs Mifare Classic</h2>
+  <h2><span class="num">08</span> <a href="https://claude.ai/artifact/UC5L1BBbH7oZrGnSr55NRE" target="_blank" rel="noopener">Lecture/écriture de secteurs Mifare Classic</a></h2>
   <p>Structure d'une carte Mifare Classic : secteurs, blocs, clés A/B, bits d'accès. Lecture puis écriture d'un bloc de données, lecture du bloc fabricant.</p>
   <div class="livrable"><b>Livrable :</b> mini rapport de TP avec capture des données lues/écrites.</div>
 </section>
 
 <section id="s9">
-  <h2><span class="num">09</span> Atelier clonage et rejeu</h2>
+  <h2><span class="num">09</span> <a href="https://claude.ai/artifact/JywJYUZ1RR188e1XFn7GZE" target="_blank" rel="noopener">Atelier clonage et rejeu</a></h2>
   <p>Démonstration de clonage d'UID sur carte magique (ou simulation logicielle). Discussion du cadre légal (accès frauduleux à un STAD, usage strictement pédagogique et consenti).</p>
   <div class="livrable"><b>Livrable :</b> compte-rendu d'attaque incluant les limites légales rencontrées.</div>
 </section>
 
 <section id="s10">
-  <h2><span class="num">10</span> Attaques avancées (étude de cas)</h2>
+  <h2><span class="num">10</span> <a href="https://claude.ai/artifact/LaW67gLLXWYSNMefGuVYR7" target="_blank" rel="noopener">Attaques avancées (étude de cas)</a></h2>
   <p>Attaques Crypto1 (darkside, nested authentication), attaques relais sur badges sans contact, outils dédiés (Proxmark3, Flipper Zero) en complément du kit — traité en étude de cas / démonstrations commentées.</p>
   <div class="livrable"><b>Livrable :</b> QCM de compréhension.</div>
 </section>
 
 <section id="s11">
-  <h2><span class="num">11</span> Contre-mesures et conception sécurisée</h2>
+  <h2><span class="num">11</span> <a href="https://claude.ai/artifact/GrKt4QD46C4aKNejaWGrwU" target="_blank" rel="noopener">Contre-mesures et conception sécurisée</a></h2>
   <p>Mifare DESFire et cryptographie forte, authentification mutuelle, UID aléatoire, limitation de portée (blindage, Faraday), bonnes pratiques (anti-rejeu, horodatage, journalisation), sensibilisation utilisateur.</p>
   <div class="livrable"><b>Livrable :</b> cahier des charges de sécurisation d'un contrôle d'accès RFID fictif.</div>
 </section>
 
 <section id="s12">
-  <h2><span class="num">12</span> Soutenances et synthèse</h2>
+  <h2><span class="num">12</span> <a href="https://claude.ai/artifact/JxmysPnLcyA9DDv33rDqJL" target="_blank" rel="noopener">Soutenances et synthèse</a></h2>
   <p>Présentation des projets, debrief collectif, quiz final de synthèse.</p>
 </section>
 </section>
