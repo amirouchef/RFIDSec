@@ -43,24 +43,83 @@ ul.steps li{margin-bottom:.5rem;}
 .nav-foot{display:flex;justify-content:space-between;margin-top:2.5rem;font-size:.85rem;}
 .nav-foot a{color:var(--text-dim);text-decoration:none;}
 .nav-foot a:hover{color:var(--accent);}
+h3{font-size:.95rem;color:var(--accent);margin:1.1rem 0 .4rem;}
+h3:first-child{margin-top:0;}
+p{margin:.5rem 0;}
+.overflow{overflow-x:auto;margin-top:.5rem;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th,td{text-align:left;padding:.45rem .55rem;border-bottom:1px solid var(--border);vertical-align:top;}
+th{color:var(--text-dim);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;}
+ol.steps{margin:0;padding-left:1.2rem;}
+ol.steps li{margin-bottom:.6rem;}
+.note{font-size:.85rem;color:var(--text-dim);margin-top:.8rem;}
 </style>
 </head>
 <body>
 <header>
   <h1>Séance 1<span>Sécurité RFID</span></h1>
-  <a class="back" href="index.html">← Accueil</a>
+  <a class="back" href="cours-securite-rfid.html">← Accueil</a>
 </header>
 <main>
   <span class="badge">1h30</span>
   <h2 style="color:var(--text);text-transform:none;letter-spacing:0;font-size:1.5rem;margin-top:.6rem;">RFID : principes, fréquences, normes</h2>
 
   <h2>Cours</h2>
-  <div class="card"><ul class="steps"><li>Bandes LF (125 kHz), HF (13,56 MHz), UHF (860-960 MHz)</li><li>Couplage inductif (champ proche) vs propagation en champ lointain</li><li>Normes ISO 14443 (Mifare), ISO 15693, ISO 18000-6 (UHF)</li><li>Cas d'usage : transport, paiement sans contact, logistique, contrôle d'accès</li></ul></div>
+  <div class="card">
+
+    <h3>1. Qu'est-ce que la RFID ?</h3>
+    <p>La RFID (<i>Radio Frequency IDentification</i>) permet d'identifier un objet ou une personne à distance, sans contact physique, grâce à des ondes radio. Un système RFID repose toujours sur deux éléments : une <b>étiquette</b> (tag/badge/carte), composée d'une puce et d'une antenne, et un <b>lecteur</b> qui émet un champ et interroge le tag.</p>
+    <p>On distingue les tags <b>passifs</b> (sans pile, entièrement alimentés par le champ du lecteur — c'est le cas du badge et de la carte fournis), les tags <b>actifs</b> (avec pile, portée bien plus grande) et les tags <b>semi-passifs</b> (pile pour la puce, mais communication alimentée par le lecteur).</p>
+
+    <h3>2. Deux principes physiques</h3>
+    <p><b>Champ proche (couplage inductif)</b> — utilisé en LF et HF. Le lecteur génère un champ magnétique alternatif ; la bobine du tag capte ce champ par induction, ce qui l'alimente en énergie. Le tag répond en faisant varier sa charge électrique (<i>modulation de charge</i>), ce que le lecteur détecte. Portée : de quelques cm à ~10 cm.</p>
+    <p><b>Champ lointain (rétrodiffusion)</b> — utilisé en UHF. Le lecteur émet une onde électromagnétique propagée ; l'antenne du tag (un dipôle) réfléchit une partie de cette onde en la modulant (<i>backscatter</i>) pour transmettre ses données. Portée : plusieurs mètres.</p>
+
+    <h3>3. Les trois familles de fréquences</h3>
+    <div class="overflow">
+      <table>
+        <tr><th>Bande</th><th>Fréquence</th><th>Principe</th><th>Portée</th><th>Normes types</th><th>Usages</th></tr>
+        <tr><td><b>LF</b></td><td>125–134 kHz</td><td>Couplage inductif</td><td>Quelques cm</td><td>EM4100, HID Prox (propriétaires)</td><td>Puces animales, contrôle d'accès ancien, antidémarrage auto</td></tr>
+        <tr><td><b>HF</b></td><td>13,56 MHz</td><td>Couplage inductif</td><td>~10 cm</td><td>ISO 14443 A/B (Mifare), ISO 15693</td><td>Transport, paiement sans contact, badges NFC, passeports</td></tr>
+        <tr><td><b>UHF</b></td><td>860–960 MHz</td><td>Rétrodiffusion</td><td>Plusieurs mètres</td><td>ISO 18000-6C / EPC Gen2</td><td>Logistique, inventaire, péage, antivol magasin</td></tr>
+      </table>
+    </div>
+
+    <h3>4. Repère pratique</h3>
+    <p>Le NFC d'un smartphone fonctionne exclusivement en <b>HF (13,56 MHz)</b>, sous-ensemble d'ISO 14443/15693. C'est un moyen simple de distinguer une carte HF d'un badge LF, sans aucun matériel supplémentaire — c'est ce qu'on va exploiter en atelier.</p>
+  </div>
 
   <h2>Atelier</h2>
-  <div class="card"><ul class="steps"><li>Manipuler le badge et la carte fournis</li><li>Observer l'antenne interne si la carte est translucide</li><li>Formuler une hypothèse sur la fréquence/norme de chaque support</li><li>Comparer avec une documentation constructeur</li></ul></div>
+  <div class="card">
+    <p><b>Objectif :</b> déterminer, sans appareil de mesure, la fréquence et la norme probables du badge et de la carte fournis, en argumentant chaque hypothèse.</p>
+    <p><b>Matériel :</b> badge RFID et carte RFID de la mallette, un smartphone avec NFC activé (un par binôme si possible), éventuellement une règle.</p>
+    <ol class="steps">
+      <li><b>Observation visuelle</b> — dimensions, épaisseur, format (carte type ISO/CR80), marquages, logo d'opérateur. Noter toute information imprimée.</li>
+      <li><b>Contre-jour</b> — si la carte est translucide, chercher la bobine antenne en la plaçant devant une lumière vive : une bobine à de nombreuses fines spires évoque du LF, une bobine à moins de spires évoque du HF.</li>
+      <li><b>Test NFC</b> — activer le NFC du smartphone et approcher le badge, puis la carte, du dos du téléphone. Une détection (vibration, notification) signifie que le support est en <b>HF 13,56 MHz</b> (ISO 14443/15693). Une absence de réaction oriente plutôt vers du <b>LF 125 kHz</b>, hors de portée du NFC.</li>
+      <li><b>Lecture approfondie</b> — en cas de détection, utiliser une application de lecture NFC (ex. NFC Tools) pour identifier le type exact de puce (UID, technologie Mifare Classic/NTAG...).</li>
+      <li><b>Conclusion</b> — formuler et justifier une hypothèse finale de fréquence/norme pour chacun des deux supports.</li>
+    </ol>
+    <p class="note">Les hypothèses seront vérifiées objectivement avec le SDR aux séances 5 et 6.</p>
+  </div>
 
-  <div class="livrable"><b>Livrable :</b> fiche de synthèse des 3 familles RFID (fréquence, portée, usages, exemples)</div>
+  <div class="livrable"><b>Livrable :</b> fiche de synthèse comparant les 3 familles RFID (tableau fréquence / portée / usages / exemples) + conclusion argumentée sur la nature probable du badge et de la carte fournis</div>
+
+  <h2>Glossaire de la séance</h2>
+  <div class="card">
+    <div class="overflow">
+      <table>
+        <tr><th>Acronyme</th><th>Signification</th></tr>
+        <tr><td><b>LF</b></td><td><i>Low Frequency</i> — basse fréquence (125–134 kHz)</td></tr>
+        <tr><td><b>HF</b></td><td><i>High Frequency</i> — haute fréquence (13,56 MHz)</td></tr>
+        <tr><td><b>UHF</b></td><td><i>Ultra High Frequency</i> — ultra haute fréquence (860–960 MHz)</td></tr>
+        <tr><td><b>ISO</b></td><td><i>International Organization for Standardization</i> — organisme de normalisation (ISO 14443, ISO 15693, ISO 18000-6)</td></tr>
+        <tr><td><b>NFC</b></td><td><i>Near Field Communication</i> — technologie grand public des smartphones, fonctionnant en HF 13,56 MHz</td></tr>
+        <tr><td><b>UID</b></td><td><i>Unique IDentifier</i> — identifiant unique d'un tag RFID</td></tr>
+        <tr><td><b>CR80</b></td><td>Format standard des cartes plastiques (85,6 × 54 mm), celui des badges et cartes bancaires</td></tr>
+      </table>
+    </div>
+  </div>
 
 </main>
 </body>

@@ -43,24 +43,59 @@ ul.steps li{margin-bottom:.5rem;}
 .nav-foot{display:flex;justify-content:space-between;margin-top:2.5rem;font-size:.85rem;}
 .nav-foot a{color:var(--text-dim);text-decoration:none;}
 .nav-foot a:hover{color:var(--accent);}
+h3{font-size:.95rem;color:var(--accent);margin:1.1rem 0 .4rem;}
+h3:first-child{margin-top:0;}
+p{margin:.5rem 0;}
+.overflow{overflow-x:auto;margin-top:.5rem;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th,td{text-align:left;padding:.45rem .55rem;border-bottom:1px solid var(--border);vertical-align:top;}
+th{color:var(--text-dim);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;}
+ol.steps{margin:0;padding-left:1.2rem;}
+ol.steps li{margin-bottom:.6rem;}
+.note{font-size:.85rem;color:var(--text-dim);margin-top:.8rem;}
 </style>
 </head>
 <body>
 <header>
   <h1>Séance 3<span>Sécurité RFID</span></h1>
-  <a class="back" href="index.html">← Accueil</a>
+  <a class="back" href="cours-securite-rfid.html">← Accueil</a>
 </header>
 <main>
   <span class="badge">1h30</span>
   <h2 style="color:var(--text);text-transform:none;letter-spacing:0;font-size:1.5rem;margin-top:.6rem;">Prise en main du SDR</h2>
 
   <h2>Cours</h2>
-  <div class="card"><ul class="steps"><li>Architecture d'un récepteur SDR et rôle du tuner R820T2</li><li>Pourquoi un up-converter est nécessaire sous ~24 MHz</li><li>Rôle du TCXO dans la stabilité de fréquence</li><li>Présentation de SDR#, GQRX, SDR++</li></ul></div>
+  <div class="card">
+    <h3>1. Architecture d'un SDR</h3>
+    <p>Contrairement à une radio classique figée dans ses composants analogiques, un <b>SDR</b> numérise le signal radio le plus tôt possible : antenne → étage RF → convertisseur analogique-numérique (<b>ADC</b>) → tout le reste (filtrage, démodulation, affichage) se fait en logiciel. C'est ce qui rend le NESDR capable de couvrir 100 kHz à 1,75 GHz avec le même matériel.</p>
+    <h3>2. Pourquoi un up-converter ?</h3>
+    <p>Le tuner R820T2 de la clé NESDR ne descend bien en pratique qu'à partir d'environ 24 MHz. Or le RFID LF (125 kHz) et une partie du HF se situent en-dessous. Le <b>Ham It Up Nano</b> résout ce problème en <i>mélangeant</i> le signal reçu avec un oscillateur local fixe (souvent 125 MHz) : un signal à 125 kHz ressort alors vers 125,125 MHz, une zone que le R820T2 reçoit très bien. Le logiciel SDR doit ensuite soustraire ce décalage pour réafficher la fréquence réelle.</p>
+    <h3>3. Rôle du TCXO</h3>
+    <p>Un oscillateur à quartz standard dérive avec la température. Le <b>TCXO</b> (<i>Temperature Compensated Crystal Oscillator</i>) compense cette dérive, ce qui est indispensable ici : toute erreur de fréquence de l'oscillateur local de l'up-converter se répercute directement sur la fréquence affichée.</p>
+    <h3>4. Logiciels SDR</h3>
+    <p>SDR# (Windows), GQRX (Linux/Mac) et SDR++ (multiplateforme) permettent tous d'afficher le spectre et le waterfall, de régler le gain et d'appliquer un décalage de fréquence pour corriger l'up-conversion.</p>
+  </div>
 
   <h2>Atelier</h2>
-  <div class="card"><ul class="steps"><li>Installer le logiciel SDR choisi</li><li>Câbler NESDR Smart V5 + Ham It Up Nano + antenne adaptée</li><li>Alimenter l'up-converter en micro-USB et vérifier la détection du matériel</li><li>Premiers réglages de gain et de fréquence centrale</li></ul></div>
+  <div class="card">
+    <p><b>Objectif :</b> assembler et configurer la chaîne SDR complète.</p>
+    <p><b>Matériel :</b> NESDR Smart V5, Ham It Up Nano, adaptateurs SMA, câble micro-USB, antenne adaptée, PC.</p>
+    <ol class="steps">
+      <li><b>Installer</b> le logiciel SDR choisi (SDR#, GQRX ou SDR++).</li>
+      <li><b>Assembler la chaîne</b> : antenne → Ham It Up Nano (alimenté en micro-USB) → adaptateur SMA-SMA → clé NESDR → port USB du PC.</li>
+      <li><b>Sélectionner le périphérique</b> NESDR dans le logiciel.</li>
+      <li><b>Configurer le décalage de fréquence</b> correspondant à l'oscillateur local du Ham It Up Nano (vérifier la valeur exacte dans sa documentation).</li>
+      <li><b>Vérifier</b> qu'un signal connu apparaît correctement décalé (approfondi en séance 4).</li>
+      <li><b>Schématiser</b> le câblage réalisé.</li>
+    </ol>
+  </div>
 
-  <div class="livrable"><b>Livrable :</b> schéma de câblage annoté du poste SDR complet</div>
+  <div class="livrable"><b>Livrable :</b> schéma de câblage annoté du poste SDR complet + capture d'écran du logiciel SDR configuré avec le bon décalage de fréquence</div>
+
+  <h2>Glossaire de la séance</h2>
+  <div class="card">
+    <div class="overflow"><table><tr><th>Acronyme</th><th>Signification</th></tr><tr><td><b>SDR</b></td><td>Software Defined Radio — radio définie par logiciel</td></tr><tr><td><b>ADC</b></td><td>Analog to Digital Converter — convertisseur qui numérise le signal reçu</td></tr><tr><td><b>TCXO</b></td><td>Temperature Compensated Crystal Oscillator — oscillateur à quartz compensé en température</td></tr><tr><td><b>SMA</b></td><td>SubMiniature version A — type de connecteur RF utilisé entre la clé SDR, l'up-converter et l'antenne</td></tr><tr><td><b>RF</b></td><td>Radio Fréquence</td></tr></table></div>
+  </div>
 
 </main>
 </body>

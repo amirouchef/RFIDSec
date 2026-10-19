@@ -43,24 +43,51 @@ ul.steps li{margin-bottom:.5rem;}
 .nav-foot{display:flex;justify-content:space-between;margin-top:2.5rem;font-size:.85rem;}
 .nav-foot a{color:var(--text-dim);text-decoration:none;}
 .nav-foot a:hover{color:var(--accent);}
+h3{font-size:.95rem;color:var(--accent);margin:1.1rem 0 .4rem;}
+h3:first-child{margin-top:0;}
+p{margin:.5rem 0;}
+.overflow{overflow-x:auto;margin-top:.5rem;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th,td{text-align:left;padding:.45rem .55rem;border-bottom:1px solid var(--border);vertical-align:top;}
+th{color:var(--text-dim);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;}
+ol.steps{margin:0;padding-left:1.2rem;}
+ol.steps li{margin-bottom:.6rem;}
+.note{font-size:.85rem;color:var(--text-dim);margin-top:.8rem;}
 </style>
 </head>
 <body>
 <header>
   <h1>Séance 6<span>Sécurité RFID</span></h1>
-  <a class="back" href="index.html">← Accueil</a>
+  <a class="back" href="cours-securite-rfid.html">← Accueil</a>
 </header>
 <main>
   <span class="badge">1h30</span>
   <h2 style="color:var(--text);text-transform:none;letter-spacing:0;font-size:1.5rem;margin-top:.6rem;">Capture d'un badge HF 13,56 MHz</h2>
 
   <h2>Cours</h2>
-  <div class="card"><ul class="steps"><li>Couplage en champ proche à 13,56 MHz</li><li>Porteuse et modulation de charge lors d'un échange lecteur/carte</li></ul></div>
+  <div class="card">
+    <h3>1. Couplage proche à 13,56 MHz</h3>
+    <p>Le lecteur émet une porteuse continue à 13,56 MHz. Le tag, alimenté par cette porteuse, répond en faisant varier sa charge électrique (<i>load modulation</i>) — il ne génère aucune émission propre, c'est le lecteur qui détecte la perturbation induite sur son propre champ.</p>
+    <h3>2. Sous-porteuse et débits</h3>
+    <p>La norme ISO 14443 utilise une sous-porteuse (généralement 847 kHz) pour la réponse du tag, visible sous forme de bandes latérales de part et d'autre de la porteuse principale sur le spectre. Les débits possibles vont de 106 à 848 kbit/s selon le mode.</p>
+  </div>
 
   <h2>Atelier</h2>
-  <div class="card"><ul class="steps"><li>Positionner la carte/badge à proximité de l'antenne pendant une interrogation via le RC522</li><li>Observer la porteuse 13,56 MHz et ses bandes latérales</li><li>Comparer avec la capture LF de la séance précédente</li></ul></div>
+  <div class="card">
+    <p><b>Objectif :</b> observer la porteuse 13,56 MHz et la modulation de charge pendant un échange réel.</p>
+    <ol class="steps">
+      <li>Régler le SDR sur 13,56 MHz.</li>
+      <li>Positionner l'antenne à proximité du RC522 relié à l'Arduino.</li>
+      <li>Déclencher une lecture RC522 pour générer un échange lecteur/carte.</li>
+      <li>Observer la porteuse continue et les bandes latérales apparaissant lors de la réponse du tag.</li>
+      <li>Comparer visuellement avec la capture LF de la séance 5.</li>
+    </ol>
+  </div>
 
-  <div class="livrable"><b>Livrable :</b> capture annotée montrant porteuse et modulation de charge</div>
+  <div class="livrable"><b>Livrable :</b> capture annotée montrant la porteuse 13,56 MHz et les bandes latérales de modulation de charge</div>
+
+  <h2>Glossaire de la séance</h2>
+  <div class="card"><p class="note">Aucun nouvel acronyme introduit dans cette séance.</p></div>
 
 </main>
 </body>

@@ -43,24 +43,81 @@ ul.steps li{margin-bottom:.5rem;}
 .nav-foot{display:flex;justify-content:space-between;margin-top:2.5rem;font-size:.85rem;}
 .nav-foot a{color:var(--text-dim);text-decoration:none;}
 .nav-foot a:hover{color:var(--accent);}
+h3{font-size:.95rem;color:var(--accent);margin:1.1rem 0 .4rem;}
+h3:first-child{margin-top:0;}
+p{margin:.5rem 0;}
+.overflow{overflow-x:auto;margin-top:.5rem;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th,td{text-align:left;padding:.45rem .55rem;border-bottom:1px solid var(--border);vertical-align:top;}
+th{color:var(--text-dim);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;}
+ol.steps{margin:0;padding-left:1.2rem;}
+ol.steps li{margin-bottom:.6rem;}
+.note{font-size:.85rem;color:var(--text-dim);margin-top:.8rem;}
 </style>
 </head>
 <body>
 <header>
   <h1>Séance 2<span>Sécurité RFID</span></h1>
-  <a class="back" href="index.html">← Accueil</a>
+  <a class="back" href="cours-securite-rfid.html">← Accueil</a>
 </header>
 <main>
   <span class="badge">1h30</span>
   <h2 style="color:var(--text);text-transform:none;letter-spacing:0;font-size:1.5rem;margin-top:.6rem;">Menaces et surface d'attaque RFID</h2>
 
   <h2>Cours</h2>
-  <div class="card"><ul class="steps"><li>Typologie : eavesdropping, skimming, clonage, rejeu, attaque relais, brouillage</li><li>Faiblesses cryptographiques de Mifare Classic (Crypto1)</li><li>Études de cas réels : titres de transport, badges hôtel, passeports biométriques</li></ul></div>
+  <div class="card">
+
+    <h3>1. Pourquoi la RFID est une cible</h3>
+    <p>Un tag RFID passif répond à <b>toute</b> interrogation d'un lecteur compatible, sans action volontaire du porteur, et souvent sans qu'il en soit conscient. Cette absence de contact visuel et de consentement explicite au moment de la lecture est à l'origine de la plupart des attaques présentées ci-dessous.</p>
+
+    <h3>2. Typologie des attaques</h3>
+    <div class="overflow">
+      <table>
+        <tr><th>Attaque</th><th>Principe</th><th>Prérequis attaquant</th></tr>
+        <tr><td><b>Eavesdropping</b> (écoute)</td><td>Capter passivement l'échange lecteur ↔ tag</td><td>Antenne/SDR à proximité, pas d'interaction avec la cible</td></tr>
+        <tr><td><b>Skimming</b></td><td>Lire un tag à l'insu du porteur avec un lecteur non autorisé</td><td>Proximité physique (quelques cm à qq dizaines de cm selon antenne)</td></tr>
+        <tr><td><b>Clonage</b></td><td>Dupliquer l'UID/les données sur un support vierge</td><td>Lecture préalable réussie + support programmable</td></tr>
+        <tr><td><b>Rejeu</b> (replay)</td><td>Retransmettre une trame précédemment capturée</td><td>Capture valide + absence de mécanisme anti-rejeu</td></tr>
+        <tr><td><b>Attaque relais</b></td><td>Faire communiquer tag et lecteur à distance via deux complices reliés</td><td>Deux appareils relais synchronisés, cible et lecteur légitime à portée chacun</td></tr>
+        <tr><td><b>Brouillage</b> (jamming)</td><td>Saturer la bande RFID pour empêcher toute lecture</td><td>Émetteur sur la bande ciblée</td></tr>
+      </table>
+    </div>
+
+    <h3>3. Le cas Mifare Classic (Crypto1)</h3>
+    <p>Le chiffrement propriétaire <b>Crypto1</b> des cartes Mifare Classic, très répandu en HF, présente des faiblesses connues depuis plus d'une décennie (attaques <i>darkside</i> et <i>nested authentication</i>, détaillées en séance 10) qui permettent de retrouver les clés de secteur sans les connaître au préalable. C'est pour cette raison que la carte fournie dans la mallette doit être traitée comme non protégée par défaut.</p>
+
+    <h3>4. Études de cas</h3>
+    <p><b>Titres de transport</b> — l'UID et parfois le solde sont lisibles par tout lecteur compatible ; plusieurs réseaux ont été audités publiquement pour clonage de titres.</p>
+    <p><b>Badges hôtel</b> — souvent basés sur Mifare Classic avec clés par défaut non changées, vulnérables au clonage en quelques secondes.</p>
+    <p><b>Passeports biométriques</b> — protégés par le protocole <b>BAC</b> (<i>Basic Access Control</i>, norme <b>ICAO</b>) qui limite la lecture aux porteurs ayant un accès visuel à la page d'identité, mais dont certaines implémentations historiques ont montré des faiblesses d'entropie de clé.</p>
+  </div>
 
   <h2>Atelier</h2>
-  <div class="card"><ul class="steps"><li>Analyse en petits groupes d'un scénario d'attaque réel fourni</li><li>Cartographie menace → prérequis attaquant → impact</li><li>Mise en commun et débat sur les angles morts de sécurité</li></ul></div>
+  <div class="card">
+    <p><b>Objectif :</b> construire collectivement une cartographie menace → prérequis attaquant → impact, à partir de scénarios réels, et identifier les angles morts de sécurité.</p>
+    <p><b>Matériel :</b> 4 scénarios fournis par l'enseignant (transport, hôtel, paiement sans contact, passeport), tableau à compléter.</p>
+    <ol class="steps">
+      <li><b>Répartition en groupes</b> — chaque groupe reçoit un scénario différent parmi les 4.</li>
+      <li><b>Analyse du scénario</b> — identifier le type d'attaque en jeu (parmi la typologie du cours), les prérequis techniques/matériels de l'attaquant, et la proximité nécessaire avec la cible.</li>
+      <li><b>Remplissage du tableau</b> — compléter la ligne correspondant au scénario : menace / prérequis attaquant / impact (la colonne contre-mesure reste vide, elle sera traitée en séance 11).</li>
+      <li><b>Restitution orale</b> — 5 minutes par groupe pour présenter son scénario à la classe.</li>
+      <li><b>Débat collectif</b> — discussion sur les angles morts : facteur humain, clés par défaut non changées, absence de mise à jour, etc.</li>
+    </ol>
+  </div>
 
-  <div class="livrable"><b>Livrable :</b> tableau menace / prérequis attaquant / impact / contre-mesure (amorcé, à compléter au fil du module)</div>
+  <div class="livrable"><b>Livrable :</b> tableau menace / prérequis attaquant / impact / contre-mesure complété pour les 4 scénarios (colonne contre-mesure amorcée, à finaliser au fil du module)</div>
+
+  <h2>Glossaire de la séance</h2>
+  <div class="card">
+    <div class="overflow">
+      <table>
+        <tr><th>Acronyme</th><th>Signification</th></tr>
+        <tr><td><b>UID</b></td><td><i>Unique IDentifier</i> — identifiant unique d'un tag RFID</td></tr>
+        <tr><td><b>BAC</b></td><td><i>Basic Access Control</i> — protocole limitant la lecture d'un passeport biométrique aux porteurs ayant un accès visuel au document</td></tr>
+        <tr><td><b>ICAO</b></td><td><i>International Civil Aviation Organization</i> — organisation définissant les normes des passeports biométriques</td></tr>
+      </table>
+    </div>
+  </div>
 
 </main>
 </body>

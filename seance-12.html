@@ -43,24 +43,48 @@ ul.steps li{margin-bottom:.5rem;}
 .nav-foot{display:flex;justify-content:space-between;margin-top:2.5rem;font-size:.85rem;}
 .nav-foot a{color:var(--text-dim);text-decoration:none;}
 .nav-foot a:hover{color:var(--accent);}
+h3{font-size:.95rem;color:var(--accent);margin:1.1rem 0 .4rem;}
+h3:first-child{margin-top:0;}
+p{margin:.5rem 0;}
+.overflow{overflow-x:auto;margin-top:.5rem;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th,td{text-align:left;padding:.45rem .55rem;border-bottom:1px solid var(--border);vertical-align:top;}
+th{color:var(--text-dim);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;}
+ol.steps{margin:0;padding-left:1.2rem;}
+ol.steps li{margin-bottom:.6rem;}
+.note{font-size:.85rem;color:var(--text-dim);margin-top:.8rem;}
 </style>
 </head>
 <body>
 <header>
   <h1>Séance 12<span>Sécurité RFID</span></h1>
-  <a class="back" href="index.html">← Accueil</a>
+  <a class="back" href="cours-securite-rfid.html">← Accueil</a>
 </header>
 <main>
   <span class="badge">1h30</span>
   <h2 style="color:var(--text);text-transform:none;letter-spacing:0;font-size:1.5rem;margin-top:.6rem;">Soutenances et synthèse</h2>
 
   <h2>Cours</h2>
-  <div class="card"><ul class="steps"><li>Synthèse globale du module</li></ul></div>
+  <div class="card">
+    <h3>Synthèse du module</h3>
+    <p>Retour sur les 11 séances précédentes : des principes physiques de la RFID (séance 1) à la conception sécurisée (séance 11), en passant par l'observation au SDR et la pratique Arduino/RC522. L'objectif de cette dernière séance est de relier l'ensemble de ces notions à travers les projets réalisés.</p>
+  </div>
 
   <h2>Atelier</h2>
-  <div class="card"><ul class="steps"><li>Présentation des projets (Option A : audit, ou Option B : système d'accès sécurisé)</li><li>Debrief collectif</li><li>Quiz final de synthèse</li></ul></div>
+  <div class="card">
+    <p><b>Déroulé :</b></p>
+    <ol class="steps">
+      <li>Présentation des projets par binôme (10 minutes chacun) — Option A (audit de sécurité) ou Option B (système d'accès sécurisé).</li>
+      <li>Questions du jury et de la classe après chaque présentation.</li>
+      <li>Debrief collectif sur les points forts et axes d'amélioration observés.</li>
+      <li>Quiz final de synthèse.</li>
+    </ol>
+  </div>
 
   
+
+  <h2>Glossaire de la séance</h2>
+  <div class="card"><p class="note">Aucun nouvel acronyme introduit dans cette séance.</p></div>
 
 </main>
 </body>

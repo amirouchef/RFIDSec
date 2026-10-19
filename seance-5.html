@@ -43,24 +43,56 @@ ul.steps li{margin-bottom:.5rem;}
 .nav-foot{display:flex;justify-content:space-between;margin-top:2.5rem;font-size:.85rem;}
 .nav-foot a{color:var(--text-dim);text-decoration:none;}
 .nav-foot a:hover{color:var(--accent);}
+h3{font-size:.95rem;color:var(--accent);margin:1.1rem 0 .4rem;}
+h3:first-child{margin-top:0;}
+p{margin:.5rem 0;}
+.overflow{overflow-x:auto;margin-top:.5rem;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th,td{text-align:left;padding:.45rem .55rem;border-bottom:1px solid var(--border);vertical-align:top;}
+th{color:var(--text-dim);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;}
+ol.steps{margin:0;padding-left:1.2rem;}
+ol.steps li{margin-bottom:.6rem;}
+.note{font-size:.85rem;color:var(--text-dim);margin-top:.8rem;}
 </style>
 </head>
 <body>
 <header>
   <h1>Séance 5<span>Sécurité RFID</span></h1>
-  <a class="back" href="index.html">← Accueil</a>
+  <a class="back" href="cours-securite-rfid.html">← Accueil</a>
 </header>
 <main>
   <span class="badge">1h30</span>
   <h2 style="color:var(--text);text-transform:none;letter-spacing:0;font-size:1.5rem;margin-top:.6rem;">Capture d'un badge LF 125 kHz</h2>
 
   <h2>Cours</h2>
-  <div class="card"><ul class="steps"><li>Modulation ASK/FSK typique des badges LF</li><li>Standards EM4100 et HID Prox</li><li>Spécificités de la réception en-dessous de 1 MHz</li></ul></div>
+  <div class="card">
+    <h3>1. Modulation des badges LF</h3>
+    <p>Les badges 125 kHz codent leurs données par <b>ASK</b> (variation d'amplitude) ou <b>FSK</b> (variation de fréquence) de la porteuse générée par le lecteur, qu'ils renvoient modulée par couplage inductif.</p>
+    <h3>2. Standards courants</h3>
+    <p><b>EM4100</b> : tag en lecture seule, trame de 64 bits (9 bits de start, 10 blocs de 4 bits de données + parité, 1 bit de stop). <b>HID Prox</b> : format propriétaire largement utilisé en contrôle d'accès professionnel.</p>
+    <h3>3. Spécificités sous 1 MHz</h3>
+    <p>À 125 kHz, la largeur de bande utile est très étroite (quelques kHz), ce qui facilite la capture une fois l'up-converter correctement calé — contrairement au bruit plus dense rencontré en HF/UHF.</p>
+  </div>
 
   <h2>Atelier</h2>
-  <div class="card"><ul class="steps"><li>Brancher l'antenne MLA-30 Plus en entrée du Ham It Up Nano</li><li>Approcher le badge d'un lecteur LF (ou étudier une capture de référence fournie)</li><li>Repérer la modulation sur le waterfall</li></ul></div>
+  <div class="card">
+    <p><b>Objectif :</b> capturer et interpréter le signal d'un badge LF.</p>
+    <p><b>Matériel :</b> MLA-30 Plus + Ham It Up Nano + NESDR, badge LF ou capture de référence fournie par l'enseignant.</p>
+    <ol class="steps">
+      <li>Brancher l'antenne <b>MLA-30 Plus</b> en entrée du Ham It Up Nano.</li>
+      <li>Régler le SDR sur 125 kHz, décalage de l'up-converter actif.</li>
+      <li>Approcher le badge d'un lecteur LF actif (ou charger la capture de référence fournie).</li>
+      <li>Repérer la modulation sur le waterfall et déterminer s'il s'agit d'ASK ou de FSK.</li>
+      <li>Comparer avec un diagramme théorique de trame EM4100.</li>
+    </ol>
+  </div>
 
-  <div class="livrable"><b>Livrable :</b> capture + interprétation du type de modulation observée</div>
+  <div class="livrable"><b>Livrable :</b> capture annotée + identification argumentée du type de modulation observée (ASK ou FSK)</div>
+
+  <h2>Glossaire de la séance</h2>
+  <div class="card">
+    <div class="overflow"><table><tr><th>Acronyme</th><th>Signification</th></tr><tr><td><b>ASK</b></td><td>Amplitude Shift Keying — modulation par variation d'amplitude</td></tr><tr><td><b>FSK</b></td><td>Frequency Shift Keying — modulation par variation de fréquence</td></tr></table></div>
+  </div>
 
 </main>
 </body>

@@ -43,24 +43,55 @@ ul.steps li{margin-bottom:.5rem;}
 .nav-foot{display:flex;justify-content:space-between;margin-top:2.5rem;font-size:.85rem;}
 .nav-foot a{color:var(--text-dim);text-decoration:none;}
 .nav-foot a:hover{color:var(--accent);}
+h3{font-size:.95rem;color:var(--accent);margin:1.1rem 0 .4rem;}
+h3:first-child{margin-top:0;}
+p{margin:.5rem 0;}
+.overflow{overflow-x:auto;margin-top:.5rem;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+th,td{text-align:left;padding:.45rem .55rem;border-bottom:1px solid var(--border);vertical-align:top;}
+th{color:var(--text-dim);font-size:.68rem;text-transform:uppercase;letter-spacing:.04em;}
+ol.steps{margin:0;padding-left:1.2rem;}
+ol.steps li{margin-bottom:.6rem;}
+.note{font-size:.85rem;color:var(--text-dim);margin-top:.8rem;}
 </style>
 </head>
 <body>
 <header>
   <h1>Séance 7<span>Sécurité RFID</span></h1>
-  <a class="back" href="index.html">← Accueil</a>
+  <a class="back" href="cours-securite-rfid.html">← Accueil</a>
 </header>
 <main>
   <span class="badge">1h30</span>
   <h2 style="color:var(--text);text-transform:none;letter-spacing:0;font-size:1.5rem;margin-top:.6rem;">Arduino + RC522 : câblage et lecture d'UID</h2>
 
   <h2>Cours</h2>
-  <div class="card"><ul class="steps"><li>Protocole SPI entre Arduino et RC522</li><li>Présentation de la bibliothèque MFRC522</li></ul></div>
+  <div class="card">
+    <h3>1. Le protocole SPI</h3>
+    <p>Le RC522 communique avec l'Arduino via <b>SPI</b>, un bus série synchrone à 4 fils : <b>MOSI</b> (données maître → esclave), <b>MISO</b> (données esclave → maître), <b>SCK</b> (horloge) et <b>SS/CS</b> (sélection du périphérique).</p>
+    <h3>2. La bibliothèque MFRC522</h3>
+    <p>Elle expose des fonctions haut niveau comme <code>PICC_IsNewCardPresent()</code> et <code>PICC_ReadCardSerial()</code> pour détecter puis lire l'UID d'un tag sans avoir à gérer le protocole ISO 14443 bas niveau.</p>
+    <h3>3. Vocabulaire ISO 14443</h3>
+    <p>La norme distingue le <b>PCD</b> (<i>Proximity Coupling Device</i>, le lecteur — ici le RC522) et le <b>PICC</b> (<i>Proximity Integrated Circuit Card</i>, le tag — ici le badge ou la carte).</p>
+  </div>
 
   <h2>Atelier</h2>
-  <div class="card"><ul class="steps"><li>Câbler le RC522 sur l'Arduino Uno (SPI)</li><li>Installer la bibliothèque MFRC522</li><li>Écrire un premier sketch de lecture d'UID</li><li>Relever l'UID du badge et de la carte fournis</li></ul></div>
+  <div class="card">
+    <p><b>Objectif :</b> câbler le RC522 et lire l'UID du badge et de la carte.</p>
+    <ol class="steps">
+      <li><b>Câbler</b> le RC522 sur l'Arduino Uno : SDA→10, SCK→13, MOSI→11, MISO→12, RST→9, 3.3V→3.3V, GND→GND (IRQ non connecté).</li>
+      <li><b>Installer</b> la bibliothèque MFRC522 via le gestionnaire de bibliothèques de l'IDE Arduino.</li>
+      <li><b>Charger</b> un sketch de lecture d'UID (exemple fourni).</li>
+      <li><b>Téléverser</b> et ouvrir le moniteur série.</li>
+      <li><b>Présenter</b> successivement le badge puis la carte, et relever les deux UID affichés.</li>
+    </ol>
+  </div>
 
-  <div class="livrable"><b>Livrable :</b> code source commenté + UID des deux supports relevés</div>
+  <div class="livrable"><b>Livrable :</b> code source commenté + UID du badge et de la carte relevés</div>
+
+  <h2>Glossaire de la séance</h2>
+  <div class="card">
+    <div class="overflow"><table><tr><th>Acronyme</th><th>Signification</th></tr><tr><td><b>SPI</b></td><td>Serial Peripheral Interface — bus de communication série utilisé entre l'Arduino et le RC522</td></tr><tr><td><b>MOSI</b></td><td>Master Out Slave In — ligne de données du maître vers l'esclave</td></tr><tr><td><b>MISO</b></td><td>Master In Slave Out — ligne de données de l'esclave vers le maître</td></tr><tr><td><b>SCK</b></td><td>Serial Clock — ligne d'horloge du bus SPI</td></tr><tr><td><b>PCD</b></td><td>Proximity Coupling Device — le lecteur, ici le RC522</td></tr><tr><td><b>PICC</b></td><td>Proximity Integrated Circuit Card — le tag, ici le badge ou la carte</td></tr></table></div>
+  </div>
 
 </main>
 </body>
