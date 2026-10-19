@@ -53,6 +53,18 @@ th{color:var(--text-dim);font-size:.68rem;text-transform:uppercase;letter-spacin
 ol.steps{margin:0;padding-left:1.2rem;}
 ol.steps li{margin-bottom:.6rem;}
 .note{font-size:.85rem;color:var(--text-dim);margin-top:.8rem;}
+.meta-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.badge.materiel{color:var(--accent-2);}
+.step-block{border-left:3px solid var(--border);padding:.2rem 0 .2rem 1rem;margin-bottom:1.1rem;}
+.step-block.check{border-left-color:var(--accent);}
+.step-block h4{margin:0 0 .3rem;font-size:.92rem;}
+.step-block .result{font-size:.82rem;color:var(--accent);margin-top:.35rem;}
+.step-block .trouble{font-size:.82rem;color:var(--text-dim);margin-top:.3rem;}
+.step-block .trouble b{color:var(--accent-2);}
+table.selfeval{font-size:.82rem;}
+table.selfeval th{text-align:center;}
+table.selfeval td:not(:first-child){text-align:center;}
+table.selfeval td:first-child{font-size:.85rem;}
 </style>
 </head>
 <body>
@@ -61,7 +73,10 @@ ol.steps li{margin-bottom:.6rem;}
   <a class="back" href="cours-securite-rfid.html">← Accueil</a>
 </header>
 <main>
-  <span class="badge">1h30</span>
+  <div class="meta-row">
+    <span class="badge">1h30</span>
+    <span class="badge materiel">🧰 NESDR Smart V5 · Ham It Up Nano · adaptateur SMA · câble micro-USB · antenne · PC</span>
+  </div>
   <h2 style="color:var(--text);text-transform:none;letter-spacing:0;font-size:1.5rem;margin-top:.6rem;">Prise en main du SDR</h2>
 
   <h2>Cours</h2>
@@ -76,21 +91,73 @@ ol.steps li{margin-bottom:.6rem;}
     <p>SDR# (Windows), GQRX (Linux/Mac) et SDR++ (multiplateforme) permettent tous d'afficher le spectre et le waterfall, de régler le gain et d'appliquer un décalage de fréquence pour corriger l'up-conversion.</p>
   </div>
 
-  <h2>Atelier</h2>
+  <h2>Atelier guidé pas à pas</h2>
   <div class="card">
-    <p><b>Objectif :</b> assembler et configurer la chaîne SDR complète.</p>
-    <p><b>Matériel :</b> NESDR Smart V5, Ham It Up Nano, adaptateurs SMA, câble micro-USB, antenne adaptée, PC.</p>
-    <ol class="steps">
-      <li><b>Installer</b> le logiciel SDR choisi (SDR#, GQRX ou SDR++).</li>
-      <li><b>Assembler la chaîne</b> : antenne → Ham It Up Nano (alimenté en micro-USB) → adaptateur SMA-SMA → clé NESDR → port USB du PC.</li>
-      <li><b>Sélectionner le périphérique</b> NESDR dans le logiciel.</li>
-      <li><b>Configurer le décalage de fréquence</b> correspondant à l'oscillateur local du Ham It Up Nano (vérifier la valeur exacte dans sa documentation).</li>
-      <li><b>Vérifier</b> qu'un signal connu apparaît correctement décalé (approfondi en séance 4).</li>
-      <li><b>Schématiser</b> le câblage réalisé.</li>
-    </ol>
+    <p><b>Objectif :</b> assembler et configurer la chaîne SDR complète, étape par étape, en vérifiant chaque sous-étape avant de passer à la suivante.</p>
+    <p><b>Matériel :</b> NESDR Smart V5, Ham It Up Nano, adaptateur SMA mâle-mâle, câble micro-USB, antenne adaptée, PC.</p>
+
+    <div class="step-block check">
+      <h4>Étape 0 — Avant de commencer</h4>
+      <p>Posez les 4 éléments de la chaîne devant vous et identifiez-les : l'antenne, l'up-converter (boîtier « nooelec »), l'adaptateur SMA mâle-mâle, la clé NESDR (boîtier aluminium). En cas de doute, comparez avec la <a href="materiel.html" style="color:var(--accent);">page Matériel</a>.</p>
+      <p class="result">✓ Résultat attendu : les 4 éléments sont identifiés sans erreur.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 1 — Installer le logiciel SDR</h4>
+      <p>Téléchargez et installez SDR#, GQRX ou SDR++ selon votre système d'exploitation. Lancez le logiciel une première fois sans rien brancher, pour vérifier qu'il démarre correctement.</p>
+      <p class="trouble"><b>Si le logiciel ne s'installe pas :</b> vérifiez les droits administrateur du poste ; sur certains postes d'établissement, l'installation peut nécessiter l'intervention du service informatique.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 2 — Assembler la chaîne matérielle</h4>
+      <p>Dans cet ordre précis, sans forcer sur les connecteurs : <b>antenne → Ham It Up Nano → adaptateur SMA-SMA → clé NESDR</b>. Alimentez ensuite le Ham It Up Nano avec le câble micro-USB (sur une prise USB ou une batterie — pas besoin du PC pour l'alimentation).</p>
+      <p class="result">✓ Résultat attendu : la chaîne tient debout sans tension sur les connecteurs, aucune pièce ne force.</p>
+      <p class="trouble"><b>Si un connecteur résiste :</b> ne forcez jamais — vérifiez que vous utilisez bien le bon type de connecteur (SMA mâle-mâle), pas un autre adaptateur du kit.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 3 — Connecter et détecter le périphérique</h4>
+      <p>Reliez la clé NESDR au PC par USB. Dans le logiciel SDR, ouvrez la liste des périphériques et sélectionnez le NESDR (RTL2832U/R820T2).</p>
+      <p class="result">✓ Résultat attendu : le périphérique apparaît dans la liste et le logiciel ne renvoie pas d'erreur au démarrage de la réception.</p>
+      <p class="trouble"><b>Si rien n'apparaît :</b> essayez un autre port USB, vérifiez le câble, et sur Windows contrôlez que le bon driver (Zadig) est installé.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 4 — Configurer le décalage de fréquence</h4>
+      <p>Dans les réglages du logiciel, entrez le décalage de fréquence (<i>frequency offset / LO offset</i>) correspondant à l'oscillateur local du Ham It Up Nano (généralement 125 MHz — vérifiez la valeur exacte indiquée sur le boîtier ou sa documentation).</p>
+      <p class="result">✓ Résultat attendu : en réglant le logiciel sur une fréquence basse (ex. 7 MHz), le spectre actif apparaît bien autour de 125+7 = 132 MHz côté matériel, mais s'affiche correctement à 7 MHz côté logiciel.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 5 — Vérification rapide</h4>
+      <p>Balayez quelques fréquences connues (ex. grandes ondes, ou une bande FM si vous testez temporairement sans l'up-converter) pour confirmer que la chaîne reçoit bien quelque chose. L'analyse fine des signaux sera approfondie en séance 4.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 6 — Schématiser le câblage</h4>
+      <p>Dessinez (à la main ou avec un outil numérique) le schéma de la chaîne assemblée, en nommant chaque élément et chaque connecteur utilisé.</p>
+    </div>
   </div>
 
   <div class="livrable"><b>Livrable :</b> schéma de câblage annoté du poste SDR complet + capture d'écran du logiciel SDR configuré avec le bon décalage de fréquence</div>
+
+  <h2>Auto-évaluation</h2>
+  <div class="card">
+    <p class="note">À remplir individuellement ou en binôme avant de passer à la séance 4. Soyez honnête — ça sert à repérer ce qu'il faut revoir, pas à être noté.</p>
+    <div class="overflow">
+      <table class="selfeval">
+        <tr><th style="text-align:left;">Compétence</th><th>Acquis</th><th>En cours</th><th>Non acquis</th></tr>
+        <tr><td>Je sais identifier les 4 éléments de la chaîne SDR</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>J'ai assemblé la chaîne dans le bon ordre, sans forcer</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>Le logiciel détecte la clé NESDR</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>J'ai appliqué le bon décalage de fréquence</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>Je peux expliquer avec mes mots pourquoi l'up-converter est nécessaire</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>Je peux expliquer le rôle du TCXO</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>Mon schéma de câblage est complet et annoté</td><td>☐</td><td>☐</td><td>☐</td></tr>
+      </table>
+    </div>
+    <p class="note">Au moins une case « Non acquis » ? Relisez la section correspondante du cours ou demandez de l'aide avant la séance 4 — toute la suite du module s'appuie sur cette chaîne SDR.</p>
+  </div>
 
   <h2>Glossaire de la séance</h2>
   <div class="card">
