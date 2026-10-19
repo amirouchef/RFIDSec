@@ -70,13 +70,14 @@ ol.steps li{margin-bottom:.6rem;}
     <p>Sur une carte Mifare Classic d'origine, le bloc 0 (contenant l'UID) est en lecture seule. Des cartes dites « magiques » lèvent cette protection et permettent de réécrire ce bloc — c'est ce qui rend le clonage d'UID possible sans attaque cryptographique.</p>
     <h3>2. Cadre légal</h3>
     <p>L'accès ou le maintien frauduleux dans un <b>STAD</b> (article 323-1 du Code pénal) est une infraction. Toute manipulation de clonage dans ce module reste strictement limitée au matériel fourni, dans un cadre pédagogique encadré et consenti — jamais sur un système tiers sans autorisation explicite.</p>
+    <p class="note">⚠️ <b>Badges d'accès réels (enseignant ou élèves)</b> — même observés en séance 1, ils sont <b>exclus</b> de cet atelier. Cloner un badge qui donne un accès réel au bâtiment, même « pour apprendre », crée un véritable moyen d'entrée non autorisé — pas une simulation. Seuls le badge et la carte de la mallette sont utilisés ici.</p>
   </div>
 
   <h2>Atelier</h2>
   <div class="card">
     <p><b>Objectif :</b> réaliser un clonage encadré et en mesurer les limites.</p>
     <ol class="steps">
-      <li>Relire l'UID de la carte/badge fourni (acquis en séance 7).</li>
+      <li>Relire l'UID <b>du badge/carte de la mallette uniquement</b> (acquis en séance 7) — jamais d'un badge d'accès réel.</li>
       <li>Si une carte magique est disponible, écrire cet UID sur son bloc 0.</li>
       <li>Vérifier que la carte clonée renvoie bien le même UID à la lecture.</li>
       <li>Tester un scénario de rejeu simple si le contexte s'y prête.</li>
