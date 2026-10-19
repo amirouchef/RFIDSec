@@ -98,8 +98,10 @@ ol.steps li{margin-bottom:.6rem;}
     <ol class="steps">
       <li><b>Observation visuelle</b> — dimensions, épaisseur, format (carte type ISO/CR80), marquages, logo d'opérateur. Noter toute information imprimée.</li>
       <li><b>Contre-jour</b> — si la carte est translucide, chercher la bobine antenne en la plaçant devant une lumière vive : une bobine à de nombreuses fines spires évoque du LF, une bobine à moins de spires évoque du HF.</li>
-      <li><b>Test NFC</b> — activer le NFC du smartphone et approcher le badge, puis la carte, du dos du téléphone. Une détection (vibration, notification) signifie que le support est en <b>HF 13,56 MHz</b> (ISO 14443/15693). Une absence de réaction oriente plutôt vers du <b>LF 125 kHz</b>, hors de portée du NFC.</li>
-      <li><b>Lecture approfondie</b> — en cas de détection, utiliser une application de lecture NFC (ex. NFC Tools) pour identifier le type exact de puce (UID, technologie Mifare Classic/NTAG...).</li>
+      <li><b>Test NFC</b> — activer le NFC du smartphone et approcher le badge, puis la carte, du dos du téléphone (sur iPhone, l'antenne est en haut du dos, juste sous la caméra — pas au centre). Une détection (vibration, notification) signifie que le support est en <b>HF 13,56 MHz</b> (ISO 14443/15693). Une absence de réaction oriente plutôt vers du <b>LF 125 kHz</b>, hors de portée du NFC.</li>
+      <li><b>Lecture approfondie</b> — en cas de détection, utiliser une application de lecture NFC (ex. NFC Tools) pour identifier le type exact de puce (UID, technologie Mifare Classic/NTAG...).
+        <p class="note">⚠️ <b>Sur iPhone</b>, aucune app (y compris NFC Tools) ne peut lire une carte <b>Mifare Classic</b> : Apple exclut volontairement ce type de la lecture via Core NFC, à cause du chiffrement Crypto1 obsolète (voir séance 2). Si rien ne se lit malgré une détection initiale réussie, ce n'est pas une erreur de manipulation — c'est cohérent avec une carte Mifare Classic. Pour confirmer, testez avec un Android si possible, ou documentez cette observation telle quelle : la confirmation définitive viendra de toute façon en séance 7 avec le RC522.</p>
+      </li>
       <li><b>Conclusion</b> — formuler et justifier une hypothèse finale de fréquence/norme pour chacun des deux supports.</li>
     </ol>
     <p class="note">Les hypothèses seront vérifiées objectivement avec le SDR aux séances 5 et 6.</p>
