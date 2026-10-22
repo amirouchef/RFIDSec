@@ -53,44 +53,227 @@ th{color:var(--text-dim);font-size:.68rem;text-transform:uppercase;letter-spacin
 ol.steps{margin:0;padding-left:1.2rem;}
 ol.steps li{margin-bottom:.6rem;}
 .note{font-size:.85rem;color:var(--text-dim);margin-top:.8rem;}
+.meta-row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center;}
+.badge.materiel{color:var(--accent-2);}
+.step-block{border-left:3px solid var(--border);padding:.2rem 0 .2rem 1rem;margin-bottom:1.1rem;}
+.step-block.check{border-left-color:var(--accent);}
+.step-block h4{margin:0 0 .3rem;font-size:.92rem;}
+.step-block .result{font-size:.82rem;color:var(--accent);margin-top:.35rem;}
+.step-block .trouble{font-size:.82rem;color:var(--text-dim);margin-top:.3rem;}
+.step-block .trouble b{color:var(--accent-2);}
+table.selfeval{font-size:.82rem;}
+table.selfeval th{text-align:center;}
+table.selfeval td:not(:first-child){text-align:center;}
+table.selfeval td:first-child{font-size:.85rem;}
+.alert{border-left:3px solid var(--accent-2);background:var(--surface-2);padding:.6rem .9rem;border-radius:0 8px 8px 0;margin:.7rem 0;font-size:.88rem;}
+.phase{font-size:1rem;color:var(--text);margin:1.6rem 0 .6rem;padding-bottom:.3rem;border-bottom:2px solid var(--accent);}
+.chain{font-family:var(--mono);font-size:.82rem;background:var(--surface-2);padding:.6rem .8rem;border-radius:8px;overflow-x:auto;white-space:nowrap;margin:.5rem 0;}
+ul.tight{margin:.3rem 0;padding-left:1.2rem;}
 </style>
 </head>
 <body>
 <header>
   <h1>Séance 4<span>Sécurité RFID</span></h1>
-  <a class="back" href="cours-securite-rfid.html">← Accueil</a>
+  <a class="back" href="index.html">← Accueil</a>
 </header>
 <main>
-  <span class="badge">1h30</span>
+  <div class="meta-row">
+    <span class="badge">1h30</span>
+    <span class="badge materiel">🧰 poste SDR de la séance 3 · antenne VHF-UHF (partie 1) · chaîne MLA-30 Plus + interface + Nano + NESDR (partie 2) · PC · SDR#</span>
+  </div>
   <h2 style="color:var(--text);text-transform:none;letter-spacing:0;font-size:1.5rem;margin-top:.6rem;">Réception de signaux connus</h2>
+
+  <h2>Objectifs de la séance</h2>
+  <div class="card">
+    <p>À la fin de la séance, vous saurez :</p>
+    <ul class="tight">
+      <li>lire un spectre et un waterfall, et reconnaître une modulation AM ou FM ;</li>
+      <li>régler le gain pour obtenir un signal net, sans saturation ;</li>
+      <li>mesurer l’écart de fréquence de votre récepteur et le corriger en ppm ;</li>
+      <li>valider votre chaîne sur des signaux connus avant de passer au RFID.</li>
+    </ul>
+    <p class="note">Planning indicatif : cours 20 min · partie 1 (FM) 20 min · partie 2 (HF et calibration) 40 min · livrable 10 min.</p>
+  </div>
 
   <h2>Cours</h2>
   <div class="card">
-    <h3>1. Waterfall et spectre</h3>
-    <p>Le <b>spectre</b> affiche l'amplitude du signal en fonction de la fréquence à un instant donné ; le <b>waterfall</b> empile ces spectres dans le temps pour visualiser l'évolution d'un signal — un outil indispensable pour repérer une trame RFID ponctuelle.</p>
-    <h3>2. Réglage du gain</h3>
-    <p>Un gain trop élevé sature le récepteur (signal écrêté, illisible) ; un gain trop faible noie le signal utile dans le bruit de fond. Le bon réglage se situe juste sous le seuil de saturation.</p>
-    <h3>3. Calibration de fréquence</h3>
-    <p>Même avec un TCXO, un léger écart de fréquence subsiste, exprimé en <b>PPM</b> (parties par million). On le mesure en comparant la fréquence affichée d'une émission connue à sa fréquence théorique, puis on corrige ce décalage dans le logiciel SDR.</p>
+    <h3>1. Rappels : fréquence et unités</h3>
+    <p>Un signal radio est une onde qui oscille ; sa <b>fréquence</b> est le nombre d’oscillations par seconde, en <b>hertz (Hz)</b>. On utilise des multiples : 1 kHz = 1 000 Hz, 1 MHz = 1 000 000 Hz. La FM se trouve vers 100 MHz, les badges RFID à 125 kHz et 13,56 MHz.</p>
+    <h3>2. Le spectre et le waterfall</h3>
+    <p>Le <b>spectre</b> est un graphique instantané : fréquence en horizontal, force du signal en vertical. Un signal apparaît comme un pic ou une bosse.</p>
+    <p>Le <b>waterfall</b> (« cascade ») empile ces spectres au fil du temps : la fréquence reste en horizontal, le temps défile vers le bas et la force est codée par la couleur (fond sombre = bruit, couleur vive = signal fort). C’est l’outil indispensable pour repérer une trame RFID, qui ne dure que quelques millisecondes : sur le spectre elle passe inaperçue, sur le waterfall elle laisse une trace.</p>
+    <p>Le <b>bruit de fond</b> est le signal parasite permanent (électronique, environnement) ; un signal utile doit se détacher nettement de lui.</p>
+    <h3>3. Reconnaître AM et FM</h3>
+    <p>Pour transporter un son, on fait varier une onde « porteuse » : c’est la <b>modulation</b>.</p>
+    <ul class="tight">
+      <li><b>AM</b> (modulation d’amplitude) : le son fait varier la <i>force</i> de la porteuse. Sur le spectre : un pic net au centre (la porteuse) et deux bandes symétriques de chaque côté. Largeur : environ 10 kHz.</li>
+      <li><b>FM</b> (modulation de fréquence) : le son fait varier la <i>fréquence</i> de la porteuse. Sur le spectre : une large bosse d’environ 200 kHz (FM de radiodiffusion). Comme elle est large, on la règle en <b>WFM</b> (« wide FM »).</li>
+    </ul>
+    <p>La <b>bande passante</b> (<i>bandwidth</i>) du logiciel est la largeur de spectre qu’on écoute : elle doit correspondre au signal (10 kHz en AM, ~200 kHz en WFM).</p>
+    <h3>4. Le gain et le décibel</h3>
+    <p>Le <b>gain</b> est l’amplification appliquée au signal avant numérisation. Son effet se mesure en <b>décibels (dB)</b>, une échelle logarithmique : +3 dB ≈ puissance ×2, +10 dB = ×10, +20 dB = ×100. Un écart de 20 dB entre le signal et le bruit est donc déjà très net.</p>
+    <ul class="tight">
+      <li><b>Gain trop faible :</b> le signal reste noyé dans le bruit.</li>
+      <li><b>Gain trop élevé :</b> le récepteur <b>sature</b> : le plancher de bruit monte beaucoup, des signaux fantômes (copies parasites) apparaissent et le son est déformé.</li>
+      <li><b>Bon réglage :</b> celui qui maximise l’écart signal / bruit (le <b>rapport signal sur bruit</b>, SNR), juste en dessous du seuil de saturation.</li>
+    </ul>
+    <h3>5. La calibration en ppm</h3>
+    <p>L’horloge de la clé (le quartz) n’est jamais parfaitement exacte : la fréquence affichée s’écarte légèrement de la vraie. On exprime cet écart en <b>ppm</b> (parties par million) : 1 ppm = 1 millionième de la fréquence. Exemples : 1 ppm à 100 MHz = 100 Hz ; 20 ppm à 100 MHz = 2 kHz.</p>
+    <p>Pour mesurer l’écart, on reçoit une émission dont on connaît la fréquence exacte, on lit la fréquence affichée par SDR#, et on calcule :</p>
+    <div class="chain">ppm = (fréquence lue − fréquence théorique) ÷ fréquence du tuner × 1 000 000</div>
+    <p><b>Piège important :</b> avec le Nano, le tuner de la NESDR reçoit en réalité la fréquence décalée de 125 MHz (un signal à 9,5 MHz arrive au tuner à 134,5 MHz). Le calcul se fait avec la fréquence <b>du tuner</b> (réelle + 125 MHz), pas avec la fréquence affichée par le logiciel ; sinon on surestime la correction d’un facteur 10 à 20.</p>
+    <h3>6. Choisir ses signaux de référence</h3>
+    <p>Une bonne référence a une fréquence exacte et un signal stable.</p>
+    <ul class="tight">
+      <li><b>Radio FM :</b> facile à recevoir, idéale pour apprendre à régler le gain. Mais sa fréquence est trop imprécise pour calibrer. Elle ne passe pas par le Nano, donc elle se fait avec la NESDR seule.</li>
+      <li><b>Radio AM en ondes courtes :</b> la porteuse des émetteurs de radiodiffusion est précise à quelques hertz près. C’est notre référence de calibration. La fréquence théorique vient d’une grille des programmes ondes courtes.</li>
+      <li><b>Bande CB (~27 MHz) :</b> observation intéressante, mais les émetteurs sont peu précis et l’activité est irrégulière : ce n’est pas une référence.</li>
+      <li><b>DCF77 (77,5 kHz) :</b> signal horaire très précis, mais hors de portée de notre chaîne : il est sous la plage du Nano (100 kHz) et sous celle de la MLA-30 Plus (500 kHz). C’est un exemple utile pour comprendre qu’un matériel a des limites.</li>
+    </ul>
   </div>
 
-  <h2>Atelier</h2>
+  <h2>Atelier guidé pas à pas</h2>
   <div class="card">
-    <p><b>Objectif :</b> valider la chaîne de réception et calibrer le récepteur avant de passer au RFID.</p>
-    <ol class="steps">
-      <li><b>Choisir une référence connue</b> : radio AM/FM, signal horaire DCF77, ou bande CB.</li>
-      <li><b>Régler le gain</b> pour obtenir un signal net sans saturation.</li>
-      <li><b>Mesurer l'écart</b> entre fréquence affichée et fréquence théorique, et en déduire la correction en <b>PPM</b> à appliquer.</li>
-      <li><b>Appliquer la correction</b> dans le logiciel SDR.</li>
-      <li><b>Capturer</b> le waterfall de 2 signaux différents et les identifier.</li>
-    </ol>
+    <p><b>Objectif :</b> valider la chaîne de réception et calibrer le récepteur avant de passer au RFID. Partie 1 : la NESDR seule apprend à régler le gain sur la FM. Partie 2 : la chaîne HF complète permet de mesurer, calculer et appliquer la correction en ppm.</p>
+    <p><b>Avant de commencer :</b> relisez les précautions de la séance 3 (visser les connecteurs à la main, débrancher l’USB de la NESDR avant de modifier le montage RF, et ne jamais relier le côté antenne de l’interface MLA-30 au Nano).</p>
+
+    <h3 class="phase">Partie 1 — NESDR seule : régler le gain et identifier un signal FM</h3>
+    <div class="chain">antenne VHF-UHF ─SMA─► NESDR ─USB─► PC</div>
+
+    <div class="step-block">
+      <h4>Étape 1 — Monter et lancer</h4>
+      <p>Vissez l’antenne VHF-UHF sur la NESDR (brins à ~75 cm), branchez l’USB, lancez SDR#. Source <b>RTL-SDR (USB)</b>, <i>Quadrature sampling</i>, 2.4 MSPS, AGC décochés, <b>Shift décoché</b>, ppm à 0, puis <b>Play</b>.</p>
+      <p class="result">✓ Résultat attendu : spectre et waterfall défilent.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 2 — Trouver une station</h4>
+      <p>Réglez la fréquence sur 100 MHz, mode <b>WFM</b>. Repérez sur le spectre les bosses d’environ 200 kHz ; cliquez sur l’une d’elles pour vous y accorder.</p>
+      <p class="result">✓ Résultat attendu : vous entendez une station FM.</p>
+    </div>
+
+    <div class="step-block check">
+      <h4>Étape 3 — Régler le gain avec méthode</h4>
+      <ol class="steps">
+        <li>Mettez <b>RF Gain</b> au minimum : le signal est faible, le waterfall presque noir.</li>
+        <li>Montez le gain <b>par petits crans</b>, en observant l’écart entre le sommet de la bosse et le bruit (en dB).</li>
+        <li>Arrêtez-vous quand cet écart cesse d’augmenter, ou quand le bruit de fond monte brusquement ou que des signaux fantômes apparaissent. Reculez de 1 ou 2 crans.</li>
+        <li>Notez la valeur de gain retenue et l’écart signal / bruit lu (en dB).</li>
+      </ol>
+      <p class="result">✓ Résultat attendu : son net, signal bien détaché du bruit, aucun fantôme sur le spectre.</p>
+      <p class="trouble"><b>Spectre peu lisible ?</b> Ajustez <b>Range</b> et <b>Contrast</b> du panneau d’affichage (noms variables selon la version) pour que le bruit apparaisse en fond sombre.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 4 — Identifier et capturer le signal n°1</h4>
+      <p>Réglez la bande passante à ~180-200 kHz, centrez la station, puis faites une capture d’écran montrant le spectre et le waterfall. Complétez le tableau d’identité du signal n°1 (voir plus bas) : fréquence, mode, bande passante, largeur observée, niveau, aspect.</p>
+      <p class="result">✓ Résultat attendu : capture lisible avec la fréquence visible.</p>
+    </div>
+
+    <h3 class="phase">Partie 2 — Chaîne HF complète : mesurer et corriger l’écart en ppm</h3>
+    <div class="chain">boucle MLA-30 + interface ─► Nano ─SMA m-m─► NESDR ─USB─► PC</div>
+
+    <div class="step-block">
+      <h4>Étape 5 — Passer à la chaîne HF</h4>
+      <p>Fermez SDR#, <b>débranchez l’USB de la NESDR</b>, puis remontez la chaîne de la séance 3 (phase B) : boucle, interface, Nano, adaptateur, NESDR, avec les alimentations dans le même ordre. Relancez SDR#, cochez <b>Shift</b> = <b>125000000</b>, ppm à <b>0</b>, puis <b>Play</b>.</p>
+      <p class="result">✓ Résultat attendu : la FM a disparu ; le bruit HF est visible.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 6 — Choisir la station de référence</h4>
+      <p>Munissez-vous de la <b>grille des programmes ondes courtes</b> à l’heure de la séance (l’enseignant vous indique la source) et choisissez une émission AM bien reçue, avec sa <b>fréquence théorique exacte</b> (par exemple 9 500 kHz). Mode <b>AM</b>, bande passante ~10 kHz. Réglez le gain avec la méthode de l’étape 3, et tournez la boucle pour réduire le bruit.</p>
+      <p class="result">✓ Résultat attendu : une porteuse AM nette (pic central avec deux bandes de chaque côté) et un son intelligible.</p>
+      <p class="trouble"><b>Rien reçu ?</b> Testez une autre fréquence ou une autre bande ; contrôlez alimentation, sens de l’interface, Shift, orientation de la boucle, éloignement des PC.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 7 — Mesurer l’écart de fréquence</h4>
+      <ol class="steps">
+        <li>Zoomez sur la porteuse (curseur <b>Zoom</b>) et augmentez la <b>résolution</b> de l’affichage au maximum : le pic devient fin et précis.</li>
+        <li>Cliquez sur le sommet de la porteuse et lisez la fréquence affichée par SDR#. Recommencez <b>3 fois</b> et prenez la moyenne.</li>
+        <li>Calculez <b>Δf = fréquence lue − fréquence théorique</b> (en Hz, avec le signe).</li>
+      </ol>
+      <p class="result">✓ Résultat attendu : un Δf de quelques dizaines de Hz à quelques centaines de Hz.</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 8 — Calculer la correction en ppm</h4>
+      <p>Fréquence du tuner = fréquence théorique + 125 MHz, puis :</p>
+      <div class="chain">ppm = Δf ÷ (fréquence théorique + 125 MHz) × 1 000 000</div>
+      <p><b>Exemple (valeurs fictives) :</b> théorique 9 500,000 kHz, lue 9 500,060 kHz → Δf = +60 Hz ; fréquence du tuner = 134,5 MHz ; ppm = 60 ÷ 134 500 000 × 10⁶ ≈ <b>0,45 ppm</b>. Avec 9,5 MHz au dénominateur, on aurait trouvé 6,3 ppm : c’est le piège du cours.</p>
+      <p class="result">✓ Résultat attendu : une valeur de ppm petite (de l’ordre de 0 à quelques ppm), signe noté.</p>
+    </div>
+
+    <div class="step-block check">
+      <h4>Étape 9 — Appliquer la correction et vérifier</h4>
+      <ol class="steps">
+        <li>Dans la configuration de la source (engrenage), saisissez la valeur dans <b>Frequency correction (ppm)</b>. Essayez d’abord la valeur avec le signe <b>opposé</b> à celui de Δf.</li>
+        <li>Relisez la fréquence de la porteuse comme à l’étape 7 : l’écart doit avoir <b>diminué</b>. Sinon, inversez le signe.</li>
+        <li>Si le champ n’accepte que des entiers, arrondissez : une valeur proche de 0 signifie que le récepteur est déjà très bien calibré, et c’est une conclusion valable.</li>
+      </ol>
+      <p class="result">✓ Résultat attendu : écart résiduel nettement plus petit qu’avant correction (ou déjà négligeable).</p>
+    </div>
+
+    <div class="step-block">
+      <h4>Étape 10 — Confirmer sur une 2ᵉ référence et capturer le signal n°2</h4>
+      <p>Accordez-vous sur une <b>autre</b> station AM, à une fréquence différente, et vérifiez que sa fréquence lue colle à la théorique après correction. Faites une capture (spectre + waterfall) et complétez le tableau d’identité du signal n°2. Si le temps le permet, observez la bande CB (~27 MHz) sans chercher à calibrer.</p>
+      <p class="result">✓ Résultat attendu : second signal identifié, avec écart résiduel noté.</p>
+    </div>
+
+    <h3 class="phase">Tableau d’identité d’un signal (à remplir pour chaque capture)</h3>
+    <div class="overflow"><table>
+      <tr><th>Champ</th><th>Signal n°1</th><th>Signal n°2</th></tr>
+      <tr><td>Fréquence centrale</td><td></td><td></td></tr>
+      <tr><td>Mode (WFM / AM)</td><td></td><td></td></tr>
+      <tr><td>Bande passante réglée</td><td></td><td></td></tr>
+      <tr><td>Largeur observée sur le spectre</td><td></td><td></td></tr>
+      <tr><td>Niveau et écart signal / bruit (dB)</td><td></td><td></td></tr>
+      <tr><td>Gain retenu</td><td></td><td></td></tr>
+      <tr><td>Aspect sur le waterfall</td><td></td><td></td></tr>
+      <tr><td>Comment je l’ai identifié</td><td></td><td></td></tr>
+    </table></div>
   </div>
 
-  <div class="livrable"><b>Livrable :</b> captures d'écran commentées de 2 signaux identifiés + valeur de correction PPM déterminée</div>
+  <div class="livrable"><b>Livrable :</b> captures d’écran commentées de 2 signaux identifiés (avec le tableau d’identité rempli : fréquence, mode, bande passante, niveau en dB, gain, aspect, justification de l’identification) + valeur de correction PPM déterminée (mesure, calcul avec la fréquence du tuner, valeur appliquée, écart résiduel)</div>
+
+  <h2>Auto-évaluation</h2>
+  <div class="card">
+    <p class="note">À remplir individuellement ou en binôme avant de passer à la séance 5. Soyez honnête : ça sert à repérer ce qu’il faut revoir, pas à être noté.</p>
+    <div class="overflow">
+      <table class="selfeval">
+        <tr><th style="text-align:left;">Compétence</th><th>Acquis</th><th>En cours</th><th>Non acquis</th></tr>
+        <tr><td>Je sais lire un spectre et un waterfall</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>Je reconnais une modulation AM et une modulation FM</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>Je règle le gain sans saturer et je sais le justifier</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>Je sais convertir un écart en ppm, avec la bonne fréquence</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>J’ai appliqué la correction et vérifié qu’elle réduit l’écart</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>Je peux expliquer pourquoi la FM et le DCF77 ne servent pas à calibrer ici</td><td>☐</td><td>☐</td><td>☐</td></tr>
+        <tr><td>Mes captures sont lisibles et commentées</td><td>☐</td><td>☐</td><td>☐</td></tr>
+      </table>
+    </div>
+    <p class="note">Au moins une case « Non acquis » ? Relisez la section correspondante du cours ou demandez de l’aide avant la séance 5 : la capture d’un badge s’appuie sur cette chaîne calibrée.</p>
+  </div>
 
   <h2>Glossaire de la séance</h2>
   <div class="card">
-    <div class="overflow"><table><tr><th>Acronyme</th><th>Signification</th></tr><tr><td><b>PPM</b></td><td>Parties Par Million — unité de mesure de l'écart de fréquence d'un oscillateur</td></tr><tr><td><b>AM</b></td><td>Amplitude Modulation — modulation d'amplitude</td></tr><tr><td><b>FM</b></td><td>Frequency Modulation — modulation de fréquence</td></tr><tr><td><b>dB</b></td><td>décibel — unité logarithmique utilisée pour exprimer un niveau de gain ou de signal</td></tr></table></div>
+    <div class="overflow"><table><tr><th>Terme</th><th>Signification</th></tr>
+      <tr><td><b>Hz, kHz, MHz</b></td><td>Hertz et ses multiples : unité de fréquence (1 kHz = 1 000 Hz, 1 MHz = 1 000 000 Hz)</td></tr>
+      <tr><td><b>Spectre</b></td><td>Graphique de la force du signal en fonction de la fréquence, à un instant donné</td></tr>
+      <tr><td><b>Waterfall</b></td><td>Spectres empilés dans le temps ; la couleur indique la force du signal</td></tr>
+      <tr><td><b>Porteuse</b></td><td>Onde de base que l’on module pour transporter une information</td></tr>
+      <tr><td><b>AM</b></td><td>Amplitude Modulation — modulation d’amplitude</td></tr>
+      <tr><td><b>FM / WFM</b></td><td>Frequency Modulation — modulation de fréquence ; WFM : FM large bande</td></tr>
+      <tr><td><b>Bande passante</b></td><td>Largeur de spectre écoutée ou occupée par un signal</td></tr>
+      <tr><td><b>Bruit de fond</b></td><td>Signal parasite permanent sur lequel le signal utile doit se détacher</td></tr>
+      <tr><td><b>Gain</b></td><td>Amplification du signal avant numérisation</td></tr>
+      <tr><td><b>Saturation</b></td><td>Surcharge du récepteur : signal déformé, bruit élevé, signaux fantômes</td></tr>
+      <tr><td><b>dB</b></td><td>décibel — unité logarithmique utilisée pour exprimer un niveau de gain ou de signal</td></tr>
+      <tr><td><b>SNR</b></td><td>Signal-to-Noise Ratio — écart entre le signal utile et le bruit, en dB</td></tr>
+      <tr><td><b>PPM</b></td><td>Parties Par Million — unité de mesure de l’écart de fréquence d’un oscillateur</td></tr>
+      <tr><td><b>Résolution (FFT)</b></td><td>Finesse de l’affichage du spectre : plus elle est élevée, plus on lit une fréquence précisément</td></tr>
+      <tr><td><b>CB</b></td><td>Citizen Band — bande radio ouverte au public autour de 27 MHz</td></tr>
+      <tr><td><b>DCF77</b></td><td>Émetteur allemand de signal horaire à 77,5 kHz</td></tr>
+    </table></div>
   </div>
 
 </main>
