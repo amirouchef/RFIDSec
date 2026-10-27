@@ -103,9 +103,9 @@ ul.tight{margin:.3rem 0;padding-left:1.2rem;}
     <p>Le tuner R820T2 de la NESDR reçoit bien à partir d’environ 24 MHz. La fiche annonce 100 kHz, mais cette valeur correspond au mode <i>direct sampling</i>, qui contourne le tuner et offre une sensibilité médiocre. Or le RFID LF (125 kHz) et le HF (13,56 MHz) sont bien en dessous de 24 MHz.</p>
     <p>Le <b>Ham It Up Nano</b> mélange le signal reçu avec un oscillateur local de <b>125 MHz</b> : un signal à 7 MHz ressort à 132 MHz, une zone que le R820T2 reçoit très bien. Le logiciel soustrait ensuite ce décalage (<i>shift</i>) pour réafficher la vraie fréquence.</p>
     <h3>3. Rôle du TCXO et stabilité</h3>
-    <p>Un quartz ordinaire dérive avec la température ; un <b>TCXO</b> (<i>Temperature Compensated Crystal Oscillator</i>) compense cette dérive. Deux oscillateurs interviennent dans la chaîne : l’horloge de la NESDR (TCXO, environ 0,5 ppm) et l’oscillateur local du Nano (stabilité annoncée de l’ordre de 0,5 ppm). L’erreur de ce dernier est <b>absolue</b> : 0,5 ppm × 125 MHz ≈ 60 Hz, quelle que soit la fréquence réglée. Elle sera mesurée et corrigée en séance 4.</p>
+    <p>Un quartz ordinaire dérive avec la température ; un <b>TCXO</b> (<i>Temperature Compensated Crystal Oscillator</i>) compense cette dérive. Deux oscillateurs interviennent dans la chaîne : l’horloge de la NESDR (TCXO, environ 0,5 ppm) et l’oscillateur local du Nano (stabilité annoncée de l’ordre de 0,5 ppm). L’erreur de ce dernier est <b>absolue</b> : 0,5 ppm × 125 MHz ≈ 60 Hz, quelle que soit la fréquence réglée. L’erreur de la NESDR, elle, s’applique à la fréquence du tuner (vers 132 MHz) : 0,5 ppm × 132 MHz ≈ 66 Hz, du même ordre. Elle sera mesurée et corrigée en séance 4.</p>
     <h3>4. Antennes : choisir selon la bande</h3>
-    <p>L’antenne <b>VHF-UHF</b> (brins télescopiques) convient à la FM, à ~100 MHz, et reçoit la NESDR seule. La <b>MLA-30 Plus</b> est une boucle active pour 500 kHz–30 MHz : elle se place derrière le Nano. Une <b>boucle</b> capte surtout le champ magnétique, ce qui la rend moins sensible au bruit électrique et la rend directive.</p>
+    <p>L’antenne <b>VHF-UHF</b> (brins télescopiques) convient à la FM, à ~100 MHz, et reçoit la NESDR seule. La <b>MLA-30 Plus</b> est une boucle active pour 500 kHz–30 MHz : elle se place derrière le Nano. Attention : le RFID LF (125 kHz) est <b>sous</b> sa plage ; le HF (13,56 MHz) est dedans. Une <b>boucle</b> capte surtout le champ magnétique, ce qui la rend moins sensible au bruit électrique et la rend directive.</p>
     <h3>5. SDR#</h3>
     <p>SDR# (Windows) affiche le spectre et le <b>waterfall</b>, règle le gain, choisit le mode de démodulation (WFM, AM…) et applique un décalage de fréquence pour corriger l’up-conversion.</p>
   </div>
@@ -180,7 +180,7 @@ ul.tight{margin:.3rem 0;padding-left:1.2rem;}
 
     <h3 class="phase">Phase B — Chaîne HF complète : MLA-30 Plus + Nano + NESDR</h3>
     <div class="chain">boucle + préampli ─coax─► interface MLA-30 ─SMA─► Nano (IN → OUT) ─SMA m-m─► NESDR ─USB─► PC</div>
-    <div class="alert"><b>Danger pour le matériel :</b> l’interface MLA-30 fait passer du courant continu (5 V USB vers le préampli) dans le câble coaxial. Le connecteur côté <b>antenne</b> de l’interface porte ce courant continu. Il ne doit <b>jamais</b> être relié au Nano. Seul le connecteur côté <b>récepteur</b> va vers le Nano (repères gravés sur le boîtier ; voir la notice).</div>
+    <div class="alert"><b>Danger pour le matériel :</b> l’interface MLA-30 joue le rôle de <b>Bias-T</b> : elle fait passer du courant continu (5 V USB vers le préampli) dans le câble coaxial. Le connecteur côté <b>antenne</b> de l’interface porte ce courant continu. Il ne doit <b>jamais</b> être relié au Nano. Seul le connecteur côté <b>récepteur</b> va vers le Nano (repères gravés sur le boîtier ; voir la notice). Laissez aussi l’option <b>Bias-Tee</b> de la NESDR <b>décochée</b> dans SDR#.</div>
 
     <div class="step-block">
       <h4>Étape B1 — Arrêter la phase A</h4>
@@ -202,14 +202,15 @@ ul.tight{margin:.3rem 0;padding-left:1.2rem;}
         <li>Vissez l’autre extrémité de l’adaptateur sur la NESDR.</li>
       </ol>
       <p class="result">✓ Résultat attendu : la chaîne boucle → interface → Nano → NESDR est continue et sans tension sur les connecteurs.</p>
-      <p class="trouble"><b>Un connecteur résiste ?</b> Ne forcez pas : vérifiez le type (mâle/femelle) et l’entrée/sortie du Nano.</p>
+      <p class="trouble"><b>Un doute sur le sens de l’interface ?</b> Demandez à l’enseignant avant de brancher. <b>Un connecteur résiste ?</b> Ne forcez pas : vérifiez le type (mâle/femelle) et l’entrée/sortie du Nano.</p>
     </div>
 
     <div class="step-block">
       <h4>Étape B4 — Alimenter, dans cet ordre</h4>
+      <p>On alimente d’abord les éléments RF, puis on connecte la NESDR au PC en dernier.</p>
       <ol class="steps">
         <li>Câble micro-USB sur le <b>Nano</b>, l’autre bout sur une prise USB (chargeur ou batterie de préférence).</li>
-        <li>Câble USB de l’<b>interface MLA-30</b> sur une source USB 5 V.</li>
+        <li>Câble USB de l’<b>interface MLA-30</b> sur une source USB 5 V propre (chargeur ou batterie ; évitez le PC, très bruité en HF).</li>
         <li>USB de la <b>NESDR</b> sur le PC.</li>
       </ol>
       <p class="result">✓ Résultat attendu : les trois éléments sont alimentés ; rien ne chauffe de façon anormale.</p>
@@ -225,27 +226,30 @@ ul.tight{margin:.3rem 0;padding-left:1.2rem;}
       <h4>Étape B6 — Activer le décalage dans SDR#</h4>
       <ol class="steps">
         <li>Relancez SDR#, source <b>RTL-SDR (USB)</b>, mêmes réglages qu’en A3.</li>
-        <li>Cochez <b>Shift</b> et saisissez <b>125000000</b> (en Hz).</li>
-        <li>Cliquez sur <b>Play</b>.</li>
+        <li><b>Shift encore décoché</b>, cliquez sur <b>Play</b>, mode <b>WFM</b>, fréquence <b>105,1 MHz</b> : la FM doit être <b>absente ou très faible</b>. Le signal passe maintenant par la boucle et le Nano, plus par l’antenne VHF-UHF.</li>
+        <li>Cochez <b>Shift</b> et saisissez <b>-125000000</b> (en Hz, signe négatif dans SDR# Studio).</li>
+        <li>L’afficheur de fréquence tombe à <b>0</b> : c’est normal (le tuner reste à 125 MHz, soit la valeur du décalage). Vous saisirez la fréquence HF à l’étape suivante.</li>
       </ol>
-      <p class="result">✓ Résultat attendu : les stations FM de la phase A ont <b>disparu</b> : le Nano ne laisse passer que le HF, ce qui confirme que la chaîne a changé.</p>
+      <p class="result">✓ Résultat attendu : FM absente sans Shift, puis spectre et waterfall qui défilent sans erreur avec Shift coché (-125000000). On voit la bande HF, pas la FM.</p>
+      <p class="trouble"><b>Signe du Shift :</b> la valeur à saisir (125000000 ou -125000000) dépend de la version de SDR#. Le bon réglage est celui qui affiche 0 quand le tuner est à 125 MHz. Vérifiez sur votre version.</p>
     </div>
 
     <div class="step-block check">
       <h4>Étape B7 — Recevoir un signal HF connu</h4>
       <ol class="steps">
         <li>Mode <b>AM</b>, bande passante ~10 kHz.</li>
-        <li>Balayez une bande de radiodiffusion en ondes courtes. L’enseignant indique les fréquences à tester à l’heure de la séance (par exemple vers 6 MHz ou 9,5-9,9 MHz).</li>
-        <li>Ajustez le <b>RF Gain</b> et tournez la boucle pour améliorer le signal.</li>
+        <li>Cliquez sur les chiffres de l’afficheur et saisissez la fréquence HF voulue (SDR# règle le tuner tout seul). Balayez une bande de radiodiffusion en ondes courtes. L’enseignant indique les fréquences à tester à l’heure de la séance (par exemple 9,5-9,9 MHz en journée, vers 6 MHz le soir).</li>
+        <li>Cherchez des signaux <b>larges (~10 kHz)</b> qui bougent avec le son. Les raies fines et régulièrement espacées sont du bruit de découpage (chargeurs, alimentations), pas des stations.</li>
+        <li>Ajustez le <b>RF Gain</b> (baissez-le si le signal est écrasé : la boucle active est déjà amplifiée) et tournez la boucle pour améliorer le signal.</li>
       </ol>
       <p class="result">✓ Résultat attendu : au moins une station AM identifiée, affichée à la <b>bonne fréquence</b>.</p>
-      <p class="trouble"><b>Rien reçu ?</b> Contrôlez dans l’ordre : alimentation du Nano et de l’interface, sens de l’interface (étape B3), Shift coché avec la bonne valeur, gain, heure de la journée, bruit local.</p>
-      <p class="note">📸 Capture n°2 : SDR# avec Shift coché (125000000) et la station HF identifiée.</p>
+      <p class="trouble"><b>Rien reçu ?</b> Contrôlez dans l’ordre : alimentation du Nano et de l’interface, sens de l’interface (étape B3), Shift coché avec la bonne valeur, gain, heure de la journée, bruit local. La réception en ondes courtes dépend de la propagation : l’enseignant prévoit une fréquence de repli vérifiée avant la séance.</p>
+      <p class="note">📸 Capture n°2 : SDR# avec Shift coché (-125000000) et la station HF identifiée (si aucune station n’est reçue : un signal HF bien visible, fréquence affichée, à compléter plus tard).</p>
     </div>
 
     <div class="step-block">
       <h4>Étape B8 — Preuve du décalage</h4>
-      <p>Sans changer la station : <b>décochez Shift</b>. Le même signal s’affiche maintenant à environ <b>125 MHz de plus</b> (7 MHz → ~132 MHz). Recochez <b>Shift</b> : la fréquence redevient correcte.</p>
+      <p>Sans changer la station (ni un signal : n’importe quel signal bien visible convient) : notez la fréquence affichée puis <b>décochez Shift</b>. L’affichage montre maintenant la vraie fréquence du tuner, environ <b>125 MHz de plus</b> (7 MHz → ~132 MHz), le signal restant en place sur le spectre. Recochez <b>Shift</b> : la fréquence redevient correcte.</p>
       <p class="result">✓ Résultat attendu : vous avez vu le décalage de 125 MHz « apparaître » puis être corrigé par le logiciel.</p>
     </div>
 
@@ -262,13 +266,13 @@ ul.tight{margin:.3rem 0;padding-left:1.2rem;}
       <tr><td>Sample rate</td><td>2.4 MSPS</td><td>2.4 MSPS</td></tr>
       <tr><td>AGC (RTL / Tuner)</td><td>décochés</td><td>décochés</td></tr>
       <tr><td>RF Gain</td><td>milieu, à ajuster</td><td>milieu, à ajuster</td></tr>
-      <tr><td>Shift</td><td>décoché</td><td>coché, 125000000 Hz</td></tr>
+      <tr><td>Shift</td><td>décoché</td><td>coché, -125000000 Hz (SDR# Studio)</td></tr>
       <tr><td>Mode / bande passante</td><td>WFM / ~180-200 kHz</td><td>AM / ~10 kHz</td></tr>
       <tr><td>Antenne</td><td>VHF-UHF</td><td>MLA-30 Plus + interface</td></tr>
     </table></div>
   </div>
 
-  <div class="livrable"><b>Livrable :</b> schéma de câblage annoté du poste SDR complet (phase B) + capture n°1 (station FM identifiée) + capture n°2 (SDR# avec Shift 125000000 et station HF identifiée)</div>
+  <div class="livrable"><b>Livrable :</b> schéma de câblage annoté du poste SDR complet (phase B) + capture n°1 (station FM identifiée) + capture n°2 (SDR# avec Shift -125000000 et station HF identifiée)</div>
 
   <h2>Auto-évaluation</h2>
   <div class="card">
@@ -297,7 +301,7 @@ ul.tight{margin:.3rem 0;padding-left:1.2rem;}
       <tr><td><b>TCXO</b></td><td>Temperature Compensated Crystal Oscillator : oscillateur à quartz compensé en température</td></tr>
       <tr><td><b>SMA</b></td><td>SubMiniature version A : connecteur RF utilisé sur la clé, le Nano et les antennes</td></tr>
       <tr><td><b>RF</b></td><td>Radio Fréquence</td></tr>
-      <tr><td><b>Bias-T</b></td><td>Dispositif qui injecte un courant continu dans un câble coaxial pour alimenter un préamplificateur à distance</td></tr>
+      <tr><td><b>Bias-T (Bias-Tee)</b></td><td>Dispositif qui injecte un courant continu dans un câble coaxial pour alimenter un préamplificateur à distance</td></tr>
       <tr><td><b>Shift</b></td><td>Décalage de fréquence appliqué par le logiciel pour compenser l’up-converter (125 MHz)</td></tr>
       <tr><td><b>WFM / AM</b></td><td>Modes de démodulation : FM large bande, modulation d’amplitude</td></tr>
       <tr><td><b>Waterfall</b></td><td>Affichage du spectre en fonction du temps</td></tr>
